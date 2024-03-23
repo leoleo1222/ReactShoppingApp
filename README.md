@@ -2,6 +2,16 @@
 
 This guide provides step-by-step instructions to set up a development environment for building React Native apps using Expo CLI. Follow the instructions below to get started.
 
+## Prerequisites
+
+Before you begin, ensure you have the following prerequisites installed on your system:
+
+- Node.js version 18.14.1 LTS
+  - **Windows**: [node-v18.14.1-x64.msi](https://nodejs.org/en/blog/release/v18.14.1)
+  - **macOS**: [node-v18.14.1.pkg](https://nodejs.org/en/blog/release/v18.14.1)
+- Git (if not already installed)
+  - Download from [https://git-scm.com/downloads](https://git-scm.com/downloads)
+
 ## Installation
 
 ### Windows Users
