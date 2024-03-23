@@ -32,7 +32,6 @@ This guide provides step-by-step instructions to set up a development environmen
    npx create-expo-app AwesomeProject
    cd AwesomeProject
    sudo npm cache clean -f
-   npm install -g npm@10.5.0
    npx expo start
    ```
 
