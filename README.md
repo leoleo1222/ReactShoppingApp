@@ -42,6 +42,7 @@ Before you begin, ensure you have the following prerequisites installed on your 
    npx create-expo-app AwesomeProject
    cd AwesomeProject
    sudo npm cache clean -f
+   npm install -g npm@10.5.0
    npx expo start
    ```
 
