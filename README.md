@@ -35,18 +35,14 @@ Before you begin, ensure you have the following prerequisites installed on your 
    ```bash
    brew install git
    ```
-
-3. Create a new Expo project:
-
-   ```bash
-   npx create-expo-app AwesomeProject
-   cd AwesomeProject
-   sudo npm cache clean -f
-   npx expo start
-   ```
-
    If you encounter an error related to cacache, execute the cleaning command mentioned above.
 
+3. After installing npm, run the following account to install the dependences:
+   ```bash
+   cd ReactShoppingApp
+   cd AwesomeProject
+   npm install --force
+   ```
 ## Additional Steps
 
 1. Verify Node.js and Git installations by typing the following commands in the terminal:
