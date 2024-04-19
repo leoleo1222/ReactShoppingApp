@@ -1,7 +1,3 @@
-# README
-
-This is a README file for setting up a Python environment and installing dependencies for a Django project.
-
 ## Installation
 
 To get started, first ensure that you have Python installed on your system. You can download the latest version of Python from the official Python website: https://www.python.org/downloads/
