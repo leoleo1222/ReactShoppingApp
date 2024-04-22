@@ -56,5 +56,3 @@ Replace `project_name` with the desired name for your project.
 ```shell
 django-admin startapp app_name
 ```
-
-Replace `app_name` with the desired name for your app.
