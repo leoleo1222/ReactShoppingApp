@@ -1,20 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Button, Input, Icon } from "@rneui/base";
+import MainStackNavigator from './navigation/mainNavigator';
+import LoginScreen from "./screens/LoginScreen";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <MainStackNavigator />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    marginLeft: 100,
+    marginRight: 100,
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
 });
+
