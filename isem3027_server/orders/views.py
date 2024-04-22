@@ -8,7 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
  
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, OrderListSerializer
 from .models import Order
 from .paypal_api import create_payment, execute_payment_process
  
@@ -18,8 +18,10 @@ class OrderListView(ListAPIView):
     API endpoint that allows groups to be viewed or edited.
     """
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderListSerializer
     permission_classes = [permissions.IsAuthenticated]
+ 
+
  
     def get_queryset(self):
         user = self.request.user
