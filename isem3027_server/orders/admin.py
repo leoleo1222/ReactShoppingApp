@@ -4,6 +4,6 @@ from django.contrib import admin
 from .models import Order
 
 class OrderAdmin(admin.ModelAdmin):
-	readonly_fields = ('created', 'updated',)
+    list_display = ('id', 'invoice_no','customer','product','quantity','total_amount','created',)
 
 admin.site.register(Order, OrderAdmin)
