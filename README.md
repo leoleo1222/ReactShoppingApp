@@ -56,3 +56,30 @@ Replace `project_name` with the desired name for your project.
 ```shell
 django-admin startapp app_name
 ```
+
+### Setting up CA File
+
+1. Open the command prompt or terminal.
+
+2. Run the following command to set the CA file path:
+   ```
+   npm config set cafile "C:\Program Files\nodejs\certs\ca.pem"
+   ```
+
+### Disabling Strict SSL
+
+1. Open the command prompt or terminal.
+
+2. Run the following command to disable strict SSL:
+   ```
+   npm config set strict-ssl false
+   ```
+
+### Installing Expo CLI Globally
+
+1. Open the command prompt or terminal.
+
+2. Run the following command to install Expo CLI globally:
+   ```
+   npm install --global expo-cli
+   ```
