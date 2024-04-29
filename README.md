@@ -56,3 +56,51 @@ Replace `project_name` with the desired name for your project.
 ```shell
 django-admin startapp app_name
 ```
+
+### Setting up CA File
+
+1. Open the command prompt or terminal.
+
+2. Run the following command to set the CA file path:
+   ```
+   npm config set cafile "C:\Program Files\nodejs\certs\ca.pem"
+   ```
+
+### Disabling Strict SSL
+
+1. Open the command prompt or terminal.
+
+2. Run the following command to disable strict SSL:
+   ```
+   npm config set strict-ssl false
+   ```
+
+### Installing Expo CLI Globally
+
+1. Open the command prompt or terminal.
+
+2. Run the following command to install Expo CLI globally:
+   ```
+   npm install --global expo-cli
+   ```
+   
+## Alternative Approach to Disable Certificate Verification
+
+If you are experiencing issues with the `copy nul` command, you can follow these steps to disable certificate verification in Node.js:
+
+1. Open the command prompt.
+
+2. Create an empty text file named `ca.crt` using the `echo` command with an empty string. Enter the following command:
+   ```
+   echo. > ca.crt
+   ```
+
+3. Set the `NODE_EXTRA_CA_CERTS` environment variable to the empty file path using the following command:
+   ```
+   set NODE_EXTRA_CA_CERTS=ca.crt
+   ```
+
+4. Finally, run the `npx expo start` command again:
+   ```
+   npx expo start
+   ```
