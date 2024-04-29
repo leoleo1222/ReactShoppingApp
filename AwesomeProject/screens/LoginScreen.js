@@ -18,6 +18,10 @@ const handleLogin = () => {
     console.log('login');
 };
 
+const handleForgotPassword = () => {
+    console.log('Forgot Password');
+ };
+
 const handleRegisterNavigation = () => {
    console.log('navigate to register');
 };
@@ -32,25 +36,25 @@ const AppleLogo = require('../assets/images/apple-logo.png');
 const Logo = require('../assets/images/logo.png');
     
 export default function LoginScreen() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     return (
         <SafeAreaView style={styles.safeArea}>
           <StatusBar barStyle="light-content" backgroundColor="#007AFF" />
           <View style={styles.container}>
-            <Image
-              source={Logo} // Replace with your logo
+            {/* <Image
+              source={Logo} 
               style={styles.logo}
-            />
+            /> */}
             <Text style={styles.welcomeBackText}>Welcome back!</Text>
             <Text style={styles.loginToAccountText}>Login to your account</Text>
             
             <View style={styles.inputField}>
               <TextInput
                 style={styles.input}
-                onChangeText={setUsername}
-                value={username}
-                placeholder="Username"
+                onChangeText={setEmail}
+                value={email}
+                placeholder="Email"
               />
             </View>
             <View style={styles.inputField}>
@@ -65,6 +69,10 @@ export default function LoginScreen() {
     
             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
               <Text style={styles.loginButtonText}>Sign in</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleForgotPassword}>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
@@ -95,12 +103,16 @@ export default function LoginScreen() {
 
             </View>
     
-            <Text style={styles.registerText}>
-              Don't have an account?{' '}
-              <Text style={styles.registerButtonText} onPress={handleRegisterNavigation}>
-                Sign up here
-              </Text>
-            </Text>
+            <View style={styles.registerTextContainer}>
+                <Text style={styles.registerText}>
+                    Don't have an account?{' '}
+                </Text>
+                <TouchableOpacity onPress={handleRegisterNavigation}>
+                    <Text style={styles.registerButtonText}>
+                    Sign up here
+                    </Text>
+                </TouchableOpacity>
+            </View>
           </View>
         </SafeAreaView>
       );
@@ -116,6 +128,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       padding: 20,
+      marginRight: 30,
+      marginLeft: 30,
     },
     logo: {
       width: 120,
@@ -124,15 +138,17 @@ const styles = StyleSheet.create({
       marginBottom: 32, // Spacing adjusted to give more room below logo
     },
     welcomeBackText: {
-      fontSize: 24, // Slightly larger text for the title
+      fontSize: 28, // Slightly larger text for the title
       fontWeight: 'bold',
       color: '#333', // Dark text for contrast
       marginBottom: 8, // Reduced spacing
+      alignSelf: 'flex-start', // Align to the left
     },
     loginToAccountText: {
       fontSize: 16, // Smaller subtitle text
       color: '#333', // Dark text for contrast
       marginBottom: 40, // More spacing before the input fields
+      alignSelf: 'flex-start'
     },
     inputField: {
       backgroundColor: '#FFFFFF', // White input field background
@@ -170,15 +186,19 @@ const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: 'bold',
     },
-    registerText: {
-      fontSize: 16,
-      color: '#333', // Dark text for readability
-      marginTop: 20, // More spacing above the registration prompt
-    },
-    registerButtonText: {
-      color: '#007AFF', // Use the primary color for the 'Sign up here' text
-      fontWeight: 'bold',
-    },
+    registerTextContainer: {
+        flexDirection: 'row', // Align text components in a row
+        marginTop: 20, // More spacing above the registration prompt
+        alignItems: 'center', // Align items vertically
+      },
+      registerText: {
+        fontSize: 16,
+        color: '#333', // Dark text for readability
+      },
+      registerButtonText: {
+        color: '#007AFF', // Use the primary color for the 'Sign up here' text
+        fontWeight: 'bold',
+      },
     line: {
         flex: 1,
         height: 1,
@@ -208,7 +228,11 @@ const styles = StyleSheet.create({
     oauthLogo: {
         width: 24,
         height: 24,
+    },
+    forgotPasswordText: {
+        color: '#007AFF', // Use your theme color
+        fontSize: 16,
+        marginTop: 15, // Adjust the margin as needed
     }
      
   });
-  

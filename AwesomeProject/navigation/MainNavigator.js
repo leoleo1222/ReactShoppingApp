@@ -18,7 +18,7 @@ export default function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {initialLoadingState.isLoading ? (
+        {/* {initialLoadingState.isLoading ? (
           <Stack.Screen name="Splash" component={SplashScreen} />
         ) : initialLoadingState.userToken == null ? (
           <Stack.Screen
@@ -32,7 +32,12 @@ export default function MainStackNavigator() {
             component={BottomTabNavigator}
             options={{ headerShown: false }}
           />
-        )}
+        )} */}
+          <Stack.Screen
+            name="Home"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />        
       </Stack.Navigator>
     </NavigationContainer>
   );

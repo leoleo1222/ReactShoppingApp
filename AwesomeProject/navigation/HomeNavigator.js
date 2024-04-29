@@ -7,6 +7,8 @@ import ProductsScreen from '../screens/ProductsScreen';
 import OrderScreen from '../screens/OrderScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
+import LoginScreen from "../screens/LoginScreen";
+import LoginScreen2 from "../screens/LoginScreen2";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -56,6 +58,16 @@ export default function BottomTabNavigator() {
                         <MaterialCommunityIcons name="account" color={color} size={size} />
                     ),
                 }}
+            />
+            <Tab.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ headerShown: false }}
+            />
+            <Tab.Screen
+                name="Login2"
+                component={LoginScreen2}
+                options={{ headerShown: false }}
             />
         </Tab.Navigator>
     );

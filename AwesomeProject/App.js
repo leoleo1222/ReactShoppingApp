@@ -9,15 +9,3 @@ export default function App() {
     <MainStackNavigator />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginLeft: 100,
-    marginRight: 100,
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
