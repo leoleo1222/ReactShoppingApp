@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,6 +9,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
 import LoginScreen from "../screens/LoginScreen";
 import LoginScreen2 from "../screens/LoginScreen2";
+import { registerCustomIconType } from '@rneui/base';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -59,11 +60,11 @@ export default function BottomTabNavigator() {
                     ),
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{ headerShown: false }}
-            />
+            /> */}
             <Tab.Screen
                 name="Login2"
                 component={LoginScreen2}
