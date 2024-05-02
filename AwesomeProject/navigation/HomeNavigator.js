@@ -9,6 +9,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
 import LoginScreen from "../screens/LoginScreen";
 import LoginScreen2 from "../screens/LoginScreen2";
+import ChatBotScreen from "../screens/ChatBotScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -67,6 +68,11 @@ export default function BottomTabNavigator() {
             <Tab.Screen
                 name="Login2"
                 component={LoginScreen2}
+                options={{ headerShown: false }}
+            />
+            <Tab.Screen
+                name="ChatBot"
+                component={ChatBotScreen}
                 options={{ headerShown: false }}
             />
         </Tab.Navigator>
