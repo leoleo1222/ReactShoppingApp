@@ -56,7 +56,7 @@ const ChatBotScreen = () => {
         { role: "user", content: message }
       ]
     };
-
+  
     console.log("Payload:", payload);
   
     try {
@@ -64,12 +64,13 @@ const ChatBotScreen = () => {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(payload),
-        mode: 'no-cors' // Set mode to 'no-cors'
       });
   
       if (response.ok) {
-        // Since we're using 'no-cors' mode, we can't access response body or headers
-        return 'Success';
+        const data = await response.json();
+        // Extract bot's response from data
+        const botResponse = data.choices[0].message.content;
+        return botResponse;
       } else {
         // Handle error response
         console.error("Error:", response.statusText);
@@ -80,6 +81,7 @@ const ChatBotScreen = () => {
       return 'Error';
     }
   };
+  
   
   
 
