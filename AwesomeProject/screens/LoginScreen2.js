@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   SafeAreaView,
@@ -11,7 +11,13 @@ import {
   StatusBar,
 } from 'react-native';
 
+// LoginScreen2.propTypes = {
+//   register: PropTypes.bool,
+// };
 
+// LoginScreen2.defaultProps = {
+//   register: false,
+// };
 
 // Placeholder functions for handling login and register navigation  
 const handleLogin = () => {
@@ -24,6 +30,7 @@ const handleForgotPassword = () => {
 
 const handleRegisterNavigation = () => {
   console.log('navigate to register');
+  // navigation.navigate('Login');
 };
 
 const handleOAuthLogin = (service) => {
@@ -35,9 +42,10 @@ const facebookLogo = require('../assets/images/facebook-logo.png');
 const AppleLogo = require('../assets/images/apple-logo.png');
 const Logo = require('../assets/images/logo.png');
 
-export default function LoginScreen2() {
+export default function LoginScreen2(register = false, { navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#FFFFFF" />
@@ -75,21 +83,45 @@ export default function LoginScreen2() {
             </View>
           </View>
           {/* Add eye icon for password visibility */}
+          {register? null: (
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputHint}>Retype Password</Text>
+              <View style={styles.inputIcon}>
+                <MaterialCommunityIcons name="lock" size={20} color="#8F92A1" />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={setPassword2}
+                  value={password2}
+                  secureTextEntry
+                  placeholder="Enter Password Again"
+                />
+              </View>
+            </View>
+          )}
+        {!register? null: (<Fragment>
+          <TouchableOpacity style={styles.signInButton}  onPress={handleLogin}>
+            <Text style={styles.buttonText}>SIGN IN</Text>
+            {/* Add arrow icon */}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleForgotPassword}>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
+          </Fragment>  
+        )}
 
-        <TouchableOpacity style={styles.signInButton}  onPress={handleLogin}>
-          <Text style={styles.buttonText}>SIGN IN</Text>
-          {/* Add arrow icon */}
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
-          <View style={styles.line} />
-          <Text style={styles.orSignInWithText}>Or sign in with</Text>
-          <View style={styles.line} />
-        </View>
+        {register?           
+          (<View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+              <View style={styles.line} />
+              <Text style={styles.orSignInWithText}>Or sign in with</Text>
+              <View style={styles.line} />
+            </View>)
+          : (        
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+            <View style={styles.line} />
+            <Text style={styles.orSignInWithText}>Or sign up with</Text>
+            <View style={styles.line} />
+          </View>
+        )}
 
         <View style={styles.oauthContainer}>
 

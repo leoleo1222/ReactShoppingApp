@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -60,11 +60,11 @@ export default function BottomTabNavigator() {
                     ),
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{ headerShown: false }}
-            />
+            /> */}
             <Tab.Screen
                 name="Login2"
                 component={LoginScreen2}
