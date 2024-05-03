@@ -11,3 +11,4 @@ isem3027_server/products/migrations/__pycache__
 isem3027_server/db.sqlite3
 isem3027_server/products/migrations
 isem3027_server/orders/migrations
+isem3027_server/chatbot_proxy/__pycache__
