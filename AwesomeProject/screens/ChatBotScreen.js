@@ -45,22 +45,19 @@ const ChatBotScreen = () => {
     // Log the input message
     console.log("Input Message:", message);
   
-    const apiKey = "5db41117-34d8-47ec-a128-34a19ca2c9bf";
-    const url = "https://chatgpt.hkbu.edu.hk/general/rest/deployments/gpt-35-turbo/chat/completions?api-version=2023-08-01-preview";
+    const apiUrl = "http://127.0.0.1:8000/chatbot_proxy/"; // Update the URL to your Django server
+  
     const headers = {
       'Content-Type': 'application/json',
-      'api-key': apiKey
     };
     const payload = {
-      messages: [
-        { role: "user", content: message }
-      ]
+      message: message // Change the structure of the payload as per your Django view
     };
   
     console.log("Payload:", payload);
   
     try {
-      const response = await fetch(url, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(payload),
@@ -69,7 +66,7 @@ const ChatBotScreen = () => {
       if (response.ok) {
         const data = await response.json();
         // Extract bot's response from data
-        const botResponse = data.choices[0].message.content;
+        const botResponse = data.bot_response;
         return botResponse;
       } else {
         // Handle error response
@@ -80,10 +77,7 @@ const ChatBotScreen = () => {
       console.error("Error:", error);
       return 'Error';
     }
-  };
-  
-  
-  
+  };  
 
   const handleSendMessage = async () => {
     if (message.trim() === '') return;
