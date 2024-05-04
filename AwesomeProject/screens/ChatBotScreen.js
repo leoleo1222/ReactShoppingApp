@@ -18,6 +18,7 @@ const ChatBotScreen = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [keyboardHeight, setKeyboardHeight] = useState(new Animated.Value(0));
   const scrollViewRef = useRef();
+  
 
   const questions = {
     questions: [
@@ -32,7 +33,11 @@ const ChatBotScreen = () => {
       {
         id: 3,
         text: 'What promotions are available?',
-      }
+      },
+      {
+        id: 4,
+        text: 'What product is on sale?'
+      },
 
     ],
   };
@@ -44,6 +49,8 @@ const ChatBotScreen = () => {
       'What promotions are available?': 'We have various promotions available. Please let us know the type of promotion you are interested in.',
     },
   };
+
+  
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
@@ -73,8 +80,30 @@ const ChatBotScreen = () => {
     const response = responses.responses[option];
     if (response) {
       setChatHistory((prevHistory) => [...prevHistory, { text: response, sender: 'bot' }]);
+    } else if (option === 'What product is on sale?') {
+      // Fetch product data from Django
+      fetchProducts();
     }
   };
+
+  const fetchProducts = () => {
+    // Fetch product data from Django API endpoint
+    fetch('http://127.0.0.1:8000/products/')
+      .then(response => response.json())
+      .then(data => {
+        // Extract product names from the fetched data
+        const productNames = data.map(product => product.name);
+        // Update chat history with the list of product names
+        const productsText = productNames.join(', ');
+        setChatHistory((prevHistory) => [...prevHistory, { text: `The following products are on sale: ${productsText}`, sender: 'bot' }]);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+        // Update chat history with error message if fetching fails
+        setChatHistory((prevHistory) => [...prevHistory, { text: 'Sorry, there was an error fetching product data.', sender: 'bot' }]);
+      });
+  }; 
+  
 
   return (
     <SafeAreaView style={styles.safeArea}>
