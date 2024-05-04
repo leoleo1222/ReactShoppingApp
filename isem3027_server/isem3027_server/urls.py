@@ -10,7 +10,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include("products.urls")),
     path('api/', include("orders.urls")),
-    path('chatbot_proxy/', include("chatbot_proxy.urls")),  # Add this line
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
