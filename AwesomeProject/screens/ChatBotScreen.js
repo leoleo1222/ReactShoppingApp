@@ -10,6 +10,7 @@ import {
   StatusBar,
   Animated,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 
 const ChatBotScreen = () => {
@@ -18,8 +19,34 @@ const ChatBotScreen = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(new Animated.Value(0));
   const scrollViewRef = useRef();
 
+  const questions = {
+    questions: [
+      {
+        id: 1,
+        text: 'What item do you want information about?',
+      },
+      {
+        id: 2,
+        text: 'Tell me my order details?',
+      },
+      {
+        id: 3,
+        text: 'What promotions are available?',
+      }
+
+    ],
+  };
+
+  const responses = {
+    responses: {
+      'What item do you want information about?': 'We have a wide range of products available. Please let us know the category you are interested in.',
+      'What are your order details?': 'Please provide your order number so we can assist you better.',
+      'What promotions are available?': 'We have various promotions available. Please let us know the type of promotion you are interested in.',
+    },
+  };
+
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', e => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
       Animated.timing(keyboardHeight, {
         duration: e.duration,
         toValue: e.endCoordinates.height,
@@ -41,87 +68,61 @@ const ChatBotScreen = () => {
     };
   }, []);
 
-  const submitMessage = async (message) => {
-    // Log the input message
-    console.log("Input Message:", message);
-  
-    const apiUrl = "http://127.0.0.1:8000/chatbot_proxy/"; // Update the URL to your Django server
-  
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-    const payload = {
-      message: message // Change the structure of the payload as per your Django view
-    };
-  
-    console.log("Payload:", payload);
-  
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(payload),
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        // Extract bot's response from data
-        const botResponse = data.bot_response;
-        return botResponse;
-      } else {
-        // Handle error response
-        console.error("Error:", response.statusText);
-        return 'Error';
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      return 'Error';
+  const handleOptionSelect = (option) => {
+    setChatHistory((prevHistory) => [...prevHistory, { text: option, sender: 'user' }]);
+    const response = responses.responses[option];
+    if (response) {
+      setChatHistory((prevHistory) => [...prevHistory, { text: response, sender: 'bot' }]);
     }
-  };  
-
-  const handleSendMessage = async () => {
-    if (message.trim() === '') return;
-
-    // Add user message to chat history
-    setChatHistory(prevHistory => [...prevHistory, { text: message, sender: 'user' }]);
-    // Clear input field
-    setMessage('');
-
-    // Call API to get bot's response
-    const botResponse = await submitMessage(message);
-    // Add bot's response to chat history
-    setChatHistory(prevHistory => [...prevHistory, { text: botResponse, sender: 'bot' }]);
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <View style={styles.container}>
-        {/* Chat History Display */}
-        <Animated.ScrollView
-          ref={scrollViewRef}
-          style={[styles.chatContainer, { marginBottom: keyboardHeight }]}
-          contentContainerStyle={{ paddingVertical: 20 }}
-          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-        >
-          {chatHistory.map((chat, index) => (
-            <View key={index} style={chat.sender === 'user' ? styles.userMessage : styles.botMessage}>
-              <Text style={styles.messageText}>{chat.text}</Text>
-            </View>
-          ))}
-        </Animated.ScrollView>
-        {/* Input Field */}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Type your message..."
-            onChangeText={setMessage}
-            value={message}
-            onSubmitEditing={handleSendMessage}
-          />
-          <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-            <Text style={styles.sendButtonText}>Send</Text>
-          </TouchableOpacity>
+        <View style={styles.header}>
+          <Text style={styles.title}>ChatBot</Text>
+        </View>
+        <View style={styles.chatContainer}>
+          <Animated.ScrollView
+            ref={scrollViewRef}
+            style={[styles.chatScrollView, { marginBottom: keyboardHeight }]}
+            contentContainerStyle={{ paddingVertical: 20 }}
+            onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+          >
+            {chatHistory.map((chat, index) => (
+              <View key={index} style={chat.sender === 'user' ? styles.userMessage : styles.botMessage}>
+                <Text style={styles.messageText}>{chat.text}</Text>
+              </View>
+            ))}
+          </Animated.ScrollView>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type your message..."
+              onChangeText={setMessage}
+              value={message}
+              onSubmitEditing={() => {
+                handleOptionSelect(message);
+                setMessage('');
+              }}
+            />
+            <TouchableOpacity style={styles.sendButton} onPress={() => {
+              handleOptionSelect(message);
+              setMessage('');
+            }}>
+              <Text style={styles.sendButtonText}>Send</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.optionsContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {questions.questions.map((question, index) => (
+              <TouchableOpacity key={index} style={styles.optionButton} onPress={() => handleOptionSelect(question.text)}>
+                <Text style={styles.optionText}>{question.text}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       </View>
     </SafeAreaView>
@@ -135,8 +136,24 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4267B2',
   },
   chatContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  chatScrollView: {
     flex: 1,
     paddingHorizontal: 20,
   },
@@ -158,8 +175,8 @@ const styles = StyleSheet.create({
     maxWidth: '70%',
     elevation: 3,
   },
-  messageText: {
-    color: '#FFFFFF',
+  messageText: { // black
+    color: '#000000',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -186,6 +203,27 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   sendButtonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#DADADA',
+    backgroundColor: '#FFFFFF',
+  },
+  optionButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    elevation: 3,
+    marginRight: 10,
+  },
+  optionText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
   },
