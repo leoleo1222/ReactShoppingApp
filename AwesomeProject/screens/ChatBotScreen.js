@@ -40,7 +40,7 @@ const ChatBotScreen = () => {
   const responses = {
     responses: {
       'What item do you want information about?': 'We have a wide range of products available. Please let us know the category you are interested in.',
-      'What are your order details?': 'Please provide your order number so we can assist you better.',
+      'Tell me my order details?': 'Please provide your order number so we can assist you better.',
       'What promotions are available?': 'We have various promotions available. Please let us know the type of promotion you are interested in.',
     },
   };
