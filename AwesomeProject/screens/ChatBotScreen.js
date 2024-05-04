@@ -134,7 +134,21 @@ const ChatBotScreen = () => {
         // Extract product details from the fetched data
         const { name, price, discount, quantity, description, picture } = data;
         // Format the product details into a text message
-        const productDetails = `Name: ${name}\nPrice: ${price}\nDiscount: ${discount}\nQuantity: ${quantity}\nDescription: ${description}`;
+        const productDetails = (
+          <View style={styles.productDetailsContainer}>
+            <Text style={styles.detailLabel}>Name:</Text>
+            <Text style={styles.detailValue}>{name}</Text>
+            <Text style={styles.detailLabel}>Price:</Text>
+            <Text style={styles.detailValue}>{price}</Text>
+            <Text style={styles.detailLabel}>Discount:</Text>
+            <Text style={styles.detailValue}>{discount}</Text>
+            <Text style={styles.detailLabel}>Quantity:</Text>
+            <Text style={styles.detailValue}>{quantity}</Text>
+            <Text style={styles.detailLabel}>Description:</Text>
+            <Text style={styles.detailValue}>{description}</Text>
+          </View>
+        );
+        
         // Update chat history with the product details
         setChatHistory((prevHistory) => [
           ...prevHistory,
@@ -324,6 +338,20 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
   },
+  productDetailsContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  detailLabel: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  detailValue: {
+    marginBottom: 10,
+  },
+  
 });
 
 export default ChatBotScreen;
