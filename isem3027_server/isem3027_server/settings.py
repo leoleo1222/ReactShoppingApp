@@ -63,6 +63,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:19006",
+    "https://api.openai.com/v1"
     # Add other origins as needed
 ]
 
