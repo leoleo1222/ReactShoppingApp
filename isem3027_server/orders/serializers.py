@@ -9,7 +9,7 @@ from .models import Order
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ('customer', 'product', 'quantity', 'total_amount', 'payment_id', 'payment_token', 'delivery_date')    # new for datetime
+        fields = ('customer', 'product', 'quantity', 'total_amount', 'payment_id', 'payment_token', 'delivery_date', 'status')    # new for datetime
         read_only_fields = ('invoice_no', )
 
 # for list out order details
@@ -17,5 +17,5 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ('invoice_no', 'customer', 'product', 'quantity', 'total_amount', 'delivery_date')    
+        fields = ('invoice_no', 'customer', 'product', 'quantity', 'total_amount', 'delivery_date', 'status')    
         depth = 1

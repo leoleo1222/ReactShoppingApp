@@ -1,11 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     UserCreateView,
     UserRetrieveUpdateView,
     CustomAuthToken,
-    ProductView
+    ProductView,
+    AccountView
 )
-
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
@@ -23,7 +23,11 @@ urlpatterns = [
     # URL for get specific product information with product id(pk) <primary key>
 
     path('products/<int:pk>', ProductView.as_view()),
-    path('products/', ProductView.as_view())
+    path('products/', ProductView.as_view()),
+    path('product/<int:pk>', ProductView.as_view()),
+    path('product/', ProductView.as_view()),
+    path('admin/account/<str:username>/', AccountView.as_view()),
+    path('admin/account/', AccountView.as_view()),
 ]
 
 # example:

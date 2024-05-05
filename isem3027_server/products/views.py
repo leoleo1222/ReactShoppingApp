@@ -102,3 +102,53 @@ class ProductView(APIView):
 
             product.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AccountView(APIView):
+    
+    def get_permissions(self):
+        permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in self.permission_classes]
+
+    def get(self, request, username=None):
+        # Retrieve single user or list all users
+        if username is not None:
+            try:
+                user = User.objects.get(username=username)
+                serializer = UserSerializer(user)
+                return Response(serializer.data)
+            except User.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            users = User.objects.all()
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data)
+
+    def post(self, request):
+        # Create a new user account
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, username):
+        # Partially update a user account
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, username):
+        # Delete a user account
+        try:
+            user = User.objects.get(username=username)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
