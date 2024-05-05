@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from rest_framework import viewsets, permissions
+from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import (
@@ -12,6 +13,7 @@ from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView
 )
+from rest_framework.views import APIView  # 導入 APIView
 from rest_framework.response import Response
 
 from .serializers import UserSerializer, ProductSerializer
@@ -49,13 +51,54 @@ class CustomAuthToken(ObtainAuthToken):
             'username': user.username
         })
 
-class ProductListView(ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+class ProductView(APIView):
+    
+        def get_permissions(self):
+            if self.request.method in ['POST', 'PUT', 'DELETE']:
+                # self.permission_classes = [permissions.IsAuthenticated, IsAdminUser]
+                self.permission_classes = [permissions.IsAuthenticated]
+            else:
+                self.permission_classes = []
+            return [permission() for permission in self.permission_classes]
 
+        def get(self, request, pk=None):
+            if pk is not None:
+                try:
+                    product = Product.objects.get(pk=pk)
+                    serializer = ProductSerializer(product)
+                    return Response(serializer.data)
+                except Product.DoesNotExist:
+                    return Response(status=status.HTTP_404_NOT_FOUND)
+            else:
+                products = Product.objects.all()
+                serializer = ProductSerializer(products, many=True)
+                return Response(serializer.data)
 
-class ProductDetailView(RetrieveAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+        def post(self, request):
+            serializer = ProductSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        def patch(self, request, pk):
+            try:
+                product = Product.objects.get(pk=pk)
+            except Product.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            serializer = ProductSerializer(product, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        def delete(self, request, pk):
+            try:
+                product = Product.objects.get(pk=pk)
+            except Product.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            product.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)

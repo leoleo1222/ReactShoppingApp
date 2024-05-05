@@ -3,8 +3,7 @@ from .views import (
     UserCreateView,
     UserRetrieveUpdateView,
     CustomAuthToken,
-    ProductListView,
-    ProductDetailView,
+    ProductView
 )
 
 # Wire up our API using automatic URL routing.
@@ -17,9 +16,14 @@ urlpatterns = [
     # URL for user login and return user informaiton 
     path('api-token-auth/', CustomAuthToken.as_view()),
     # URL for get products data
-    path('products/', ProductListView.as_view()),
+    
+    # path('products/', ProductListView.as_view()),
+    # path('product/<int:pk>/', ProductDetailView.as_view()),
+    
     # URL for get specific product information with product id(pk) <primary key>
-    path('product/<int:pk>/', ProductDetailView.as_view())
+
+    path('products/<int:pk>', ProductView.as_view()),
+    path('products/', ProductView.as_view())
 ]
 
 # example:

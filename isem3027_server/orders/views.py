@@ -44,24 +44,27 @@ data = {
 @api_view(['POST'])
 @renderer_classes((JSONRenderer,))
 def make_payment(request):
-    if (request.method == "POST"):
-        if (request.user.is_authenticated):
-            payment_response = create_payment(request.data.get("total_amount"))
-            if payment_response.get("error"):
-                return JsonResponse(payment_response)
-            else:
-                data = request.data
-                data['customer'] = request.user.id
-                data['payment_id'] = payment_response.pop("payment_id")
-                data['payment_token'] = payment_response.pop("payment_token")
-                serializer = OrderSerializer(data=data)
-                if serializer.is_valid():
-                    # print(serializer.cleaned_data)
-                    serializer.save()
-                    return JsonResponse(payment_response)  # {"approval_url": approval_url}
-                print(serializer.errors)
-                return JsonResponse({"error": "Cannot create order"})
+    if request.method != "POST":
+        return
+
+    if not request.user.is_authenticated:
         raise PermissionDenied()
+
+    payment_response = create_payment(request.data.get("total_amount"))
+    if payment_response.get("error"):
+        return JsonResponse(payment_response)
+
+    data = request.data
+    data['customer'] = request.user.id
+    data['payment_id'] = payment_response.pop("payment_id")
+    data['payment_token'] = payment_response.pop("payment_token")
+    serializer = OrderSerializer(data=data)
+    if not serializer.is_valid():
+        print(serializer.errors)
+        return JsonResponse({"error": "Cannot create order"})
+
+    serializer.save()
+    return JsonResponse(payment_response)
  
  
 # http://127.0.0.1:8000/cancel/?token=EC-8X333147JK744044X
