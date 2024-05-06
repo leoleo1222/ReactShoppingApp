@@ -164,51 +164,41 @@ from rest_framework.response import Response
 
 class ChatbotProxyView(APIView):
 
+
+    def submit(self, message):
+        apiKey = "4a924173-a9d3-45d5-aa47-9db5695347d7"
+        conversation = [{"role": "user", "content": message}]
+        url = "https://chatgpt.hkbu.edu.hk/general/rest/deployments/gpt-35-turbo/chat/completions?api-version=2023-08-01-preview"
+        headers = {'Content-Type': 'application/json', 'api-key': apiKey} 
+        payload = {'messages': conversation}
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            data = response.json()
+            choices = data.get('choices', [])
+            if choices:
+                message_content = choices[0].get('message', {}).get('content')
+                return message_content
+        return 'Error:', response
+
     def post(self, request):
         # Extract the message from the request data
         message = request.data.get('messages')
 
         print("messages: ", message)
 
-        # Define the URL and headers for the external service
-        url = "https://chatgpt.hkbu.edu.hk/general/rest/deployments/gpt-4-turbo/chat/completions?api-version=2023-08-01-preview"
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 19d2c73e-be6c-47b0-827c-cf623990c90d'
-        }
+        # Call the submit function to interact with the external service
+        response_content = self.submit(message)
 
-        # Prepare the payload
-        payload = {
-            'messages': [{'role': 'user', 'content': message}]
-        }
-
-        try:
-            # Send the POST request to the external service
-            response = requests.post(url, headers=headers, json=payload)
-
-            print("response: ", response)
-
-            # Check if the request was successful (status code 2xx)
-            if response.ok:
-                # Extract the response message from the external service
-                response_data = response.json()
-                response_message = response_data.get('messages')[0].get('content')
-
-                # Format the response in the desired format
-                formatted_response = {
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": response_message
-                        }
-                    ]
+        # Format the response in the desired format
+        formatted_response = {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": response_content
                 }
+            ]
+        }
 
-                # Return the formatted response
-                return Response(formatted_response)
-            else:
-                # If the request was not successful, return an error response
-                return JsonResponse({'error': 'External service error'}, status=response.status_code)
-        except requests.RequestException as e:
-            # If an error occurs during the request, return an error response
-            return JsonResponse({'error': 'Failed to connect to external service'}, status=500)
+        # Return the formatted response
+        return Response(formatted_response)
