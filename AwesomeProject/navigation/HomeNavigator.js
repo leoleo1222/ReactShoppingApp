@@ -66,7 +66,7 @@ export default function BottomTabNavigator() {
                 options={{ headerShown: false }}
             /> */}
             <Tab.Screen
-                name="Login2"
+                name="Login"
                 component={LoginScreen2}
                 options={{ headerShown: false }}
             />

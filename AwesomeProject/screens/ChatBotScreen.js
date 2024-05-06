@@ -89,18 +89,55 @@ const ChatBotScreen = () => {
       ...prevHistory,
       { text: option, sender: "user" },
     ]);
-    const response = responses.responses[option];
-    if (response) {
-      setChatHistory((prevHistory) => [
-        ...prevHistory,
-        { text: response, sender: "bot" },
-      ]);
-    } else if (option === "What product is on sale?" && token) {
-      console.log("Fetching products...");
-      // Fetch product data from Django only if token is available
-      fetchProducts();
+  
+    // If the user typed the message directly, send it to the API
+    if (!questions.questions.some((question) => question.text === option)) {
+      console.log("Sending message to API:", option);
+      fetch("http://127.0.0.1:8000/api/chatbot/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: option,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Response from API:", data);
+          // Update chat history with response from API
+          setChatHistory((prevHistory) => [
+            ...prevHistory,
+            { text: data.messages[0].content, sender: "bot" },
+          ]);
+        })
+        .catch((error) => {
+          console.error("Error sending message to API:", error);
+          // Update chat history with error message if API call fails
+          setChatHistory((prevHistory) => [
+            ...prevHistory,
+            {
+              text: "Sorry, there was an error processing your request.",
+              sender: "bot",
+            },
+          ]);
+        });
+    } else {
+      // If the user selected a predefined question, handle it accordingly
+      const response = responses.responses[option];
+      if (response) {
+        setChatHistory((prevHistory) => [
+          ...prevHistory,
+          { text: response, sender: "bot" },
+        ]);
+      } else if (option === "What product is on sale?" && token) {
+        console.log("Fetching products...");
+        // Fetch product data from Django only if token is available
+        fetchProducts();
+      }
     }
   };
+  
 
   const fetchToken = () => {
     // Fetch token from Django API
@@ -110,8 +147,8 @@ const ChatBotScreen = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: "admin",
-        password: "admin",
+        username: "a",
+        password: "a",
       }),
     })
       .then((response) => response.json())
@@ -124,7 +161,7 @@ const ChatBotScreen = () => {
 
   const fetchProducts = () => {
     // Fetch product data from Django API endpoint with token in headers
-    fetch("http://127.0.0.1:8000/api/product/1/", {
+    fetch("http://127.0.0.1:8000/api/product/", {
       headers: {
         Authorization: `Token ${token}`,
       },
@@ -132,22 +169,10 @@ const ChatBotScreen = () => {
       .then((response) => response.json())
       .then((data) => {
         // Extract product details from the fetched data
-        const { name, price, discount, quantity, description, picture } = data;
-        // Format the product details into a text message
-        const productDetails = (
-          <View style={styles.productDetailsContainer}>
-            <Text style={styles.detailLabel}>Name:</Text>
-            <Text style={styles.detailValue}>{name}</Text>
-            <Text style={styles.detailLabel}>Price:</Text>
-            <Text style={styles.detailValue}>{price}</Text>
-            <Text style={styles.detailLabel}>Discount:</Text>
-            <Text style={styles.detailValue}>{discount}</Text>
-            <Text style={styles.detailLabel}>Quantity:</Text>
-            <Text style={styles.detailValue}>{quantity}</Text>
-            <Text style={styles.detailLabel}>Description:</Text>
-            <Text style={styles.detailValue}>{description}</Text>
-          </View>
-        );
+        console.log("Data fetched:", data);
+        // Extract product details from the product object
+        const { name, price, discount, quantity, description } = data[0];
+        const productDetails = `Product Name: ${name}\nPrice: $${price}\nDiscount: ${discount}%\nQuantity: ${quantity}\nDescription: ${description}`;
         
         // Update chat history with the product details
         setChatHistory((prevHistory) => [
@@ -168,7 +193,6 @@ const ChatBotScreen = () => {
         ]);
       });
   };
-  
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -351,7 +375,6 @@ const styles = StyleSheet.create({
   detailValue: {
     marginBottom: 10,
   },
-  
 });
 
 export default ChatBotScreen;
