@@ -1,4 +1,5 @@
 
+from django.views import View
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -24,6 +25,7 @@ from .models import Product
 
 User = get_user_model()
 
+
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
@@ -33,11 +35,12 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class UserCreateView(CreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    
+
 
 class UserRetrieveUpdateView(RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
 
 class CustomAuthToken(ObtainAuthToken):
 
@@ -53,9 +56,9 @@ class CustomAuthToken(ObtainAuthToken):
             'username': user.username
         })
 
-    
+
 class ProductView(APIView):
-    
+
         def get_permissions(self):
             if self.request.method in ['POST', 'PUT', 'DELETE']:
                 # self.permission_classes = [permissions.IsAuthenticated, IsAdminUser]
@@ -90,7 +93,8 @@ class ProductView(APIView):
             except Product.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
-            serializer = ProductSerializer(product, data=request.data, partial=True)
+            serializer = ProductSerializer(
+                product, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -105,8 +109,9 @@ class ProductView(APIView):
             product.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class AccountView(APIView):
-    
+
     def get_permissions(self):
         permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in self.permission_classes]
@@ -154,28 +159,37 @@ class AccountView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-  
-from django.http import JsonResponse
-from django.views import View
-import requests
 
-class ChatbotProxyView(View):
+class ChatbotProxyView(APIView):
+
     def post(self, request):
-        if request.method == 'POST':
-            message = request.POST.get('message')
+        print("ChatbotProxyView")
+        # Extract the message from the POST data
+        message = request.POST.get('message')
 
-            url = "https://chatgpt.hkbu.edu.hk/general/rest/deployments/gpt-4-turbo/chat/completions?api-version=2023-08-01-preview"
-            headers = {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer 19d2c73e-be6c-47b0-827c-cf623990c90d'
-            }
-            payload = {
-                'messages': [
-                    {'role': 'user', 'content': message}
-                ]
-            }
+        # Define the URL and headers for the external service
+        url = "https://chatgpt.hkbu.edu.hk/general/rest/deployments/gpt-4-turbo/chat/completions?api-version=2023-08-01-preview"
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 19d2c73e-be6c-47b0-827c-cf623990c90d'
+        }
+
+        # Prepare the payload
+        payload = {
+            'messages': [{'role': 'user', 'content': message}]
+        }
+
+        try:
+            # Send the POST request to the external service
             response = requests.post(url, headers=headers, json=payload)
 
-            return JsonResponse(response.json())
-
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+            # Check if the request was successful (status code 2xx)
+            if response.ok:
+                # Return the JSON response from the external service
+                return JsonResponse(response.json())
+            else:
+                # If the request was not successful, return an error response
+                return JsonResponse({'error': 'External service error'}, status=response.status_code)
+        except requests.RequestException as e:
+            # If an error occurs during the request, return an error response
+            return JsonResponse({'error': 'Failed to connect to external service'}, status=500)

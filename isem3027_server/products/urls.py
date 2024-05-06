@@ -29,7 +29,7 @@ urlpatterns = [
     path('product/', ProductView.as_view()),
     path('admin/account/<str:username>/', AccountView.as_view()),
     path('admin/account/', AccountView.as_view()),
-    path('chatbot-proxy/', ChatbotProxyView.as_view(), name='chatbot-proxy'),
+    path('chatbot/', ChatbotProxyView.as_view()),
 ]
 
 # example:
