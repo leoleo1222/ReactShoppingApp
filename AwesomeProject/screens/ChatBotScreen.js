@@ -110,8 +110,8 @@ const ChatBotScreen = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: "admin",
-        password: "admin",
+        username: "a",
+        password: "a",
       }),
     })
       .then((response) => response.json())
@@ -124,7 +124,7 @@ const ChatBotScreen = () => {
 
   const fetchProducts = () => {
     // Fetch product data from Django API endpoint with token in headers
-    fetch("http://127.0.0.1:8000/api/product/1/", {
+    fetch("http://127.0.0.1:8000/api/product/", {
       headers: {
         Authorization: `Token ${token}`,
       },
@@ -132,22 +132,10 @@ const ChatBotScreen = () => {
       .then((response) => response.json())
       .then((data) => {
         // Extract product details from the fetched data
-        const { name, price, discount, quantity, description, picture } = data;
-        // Format the product details into a text message
-        const productDetails = (
-          <View style={styles.productDetailsContainer}>
-            <Text style={styles.detailLabel}>Name:</Text>
-            <Text style={styles.detailValue}>{name}</Text>
-            <Text style={styles.detailLabel}>Price:</Text>
-            <Text style={styles.detailValue}>{price}</Text>
-            <Text style={styles.detailLabel}>Discount:</Text>
-            <Text style={styles.detailValue}>{discount}</Text>
-            <Text style={styles.detailLabel}>Quantity:</Text>
-            <Text style={styles.detailValue}>{quantity}</Text>
-            <Text style={styles.detailLabel}>Description:</Text>
-            <Text style={styles.detailValue}>{description}</Text>
-          </View>
-        );
+        console.log("Data fetched:", data);
+        // Extract product details from the product object
+        const { name, price, discount, quantity, description } = data[0];
+        const productDetails = `Product Name: ${name}\nPrice: $${price}\nDiscount: ${discount}%\nQuantity: ${quantity}\nDescription: ${description}`;
         
         // Update chat history with the product details
         setChatHistory((prevHistory) => [
@@ -168,7 +156,6 @@ const ChatBotScreen = () => {
         ]);
       });
   };
-  
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -351,7 +338,6 @@ const styles = StyleSheet.create({
   detailValue: {
     marginBottom: 10,
   },
-  
 });
 
 export default ChatBotScreen;
