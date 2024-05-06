@@ -42,4 +42,5 @@ class ProductSerializer(serializers.ModelSerializer):
             'picture',
             'created',
             'updated',
+            "category",
         )
