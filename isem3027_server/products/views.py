@@ -160,12 +160,15 @@ class AccountView(APIView):
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+from rest_framework.response import Response
+
 class ChatbotProxyView(APIView):
 
     def post(self, request):
-        print("ChatbotProxyView")
-        # Extract the message from the POST data
-        message = request.POST.get('message')
+        # Extract the message from the request data
+        message = request.data.get('messages')
+
+        print("messages: ", message)
 
         # Define the URL and headers for the external service
         url = "https://chatgpt.hkbu.edu.hk/general/rest/deployments/gpt-4-turbo/chat/completions?api-version=2023-08-01-preview"
@@ -183,10 +186,26 @@ class ChatbotProxyView(APIView):
             # Send the POST request to the external service
             response = requests.post(url, headers=headers, json=payload)
 
+            print("response: ", response)
+
             # Check if the request was successful (status code 2xx)
             if response.ok:
-                # Return the JSON response from the external service
-                return JsonResponse(response.json())
+                # Extract the response message from the external service
+                response_data = response.json()
+                response_message = response_data.get('messages')[0].get('content')
+
+                # Format the response in the desired format
+                formatted_response = {
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": response_message
+                        }
+                    ]
+                }
+
+                # Return the formatted response
+                return Response(formatted_response)
             else:
                 # If the request was not successful, return an error response
                 return JsonResponse({'error': 'External service error'}, status=response.status_code)
