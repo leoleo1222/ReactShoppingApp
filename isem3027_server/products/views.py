@@ -2,6 +2,8 @@
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.http import JsonResponse
+import requests
 
 from rest_framework import viewsets, permissions
 from rest_framework import status
@@ -152,3 +154,28 @@ class AccountView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+  
+from django.http import JsonResponse
+from django.views import View
+import requests
+
+class ChatbotProxyView(View):
+    def post(self, request):
+        if request.method == 'POST':
+            message = request.POST.get('message')
+
+            url = "https://chatgpt.hkbu.edu.hk/general/rest/deployments/gpt-4-turbo/chat/completions?api-version=2023-08-01-preview"
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer 19d2c73e-be6c-47b0-827c-cf623990c90d'
+            }
+            payload = {
+                'messages': [
+                    {'role': 'user', 'content': message}
+                ]
+            }
+            response = requests.post(url, headers=headers, json=payload)
+
+            return JsonResponse(response.json())
+
+        return JsonResponse({'error': 'Method not allowed'}, status=405)

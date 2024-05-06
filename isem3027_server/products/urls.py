@@ -4,7 +4,8 @@ from .views import (
     UserRetrieveUpdateView,
     CustomAuthToken,
     ProductView,
-    AccountView
+    AccountView,
+    ChatbotProxyView
 )
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -28,6 +29,7 @@ urlpatterns = [
     path('product/', ProductView.as_view()),
     path('admin/account/<str:username>/', AccountView.as_view()),
     path('admin/account/', AccountView.as_view()),
+    path('chatbot-proxy/', ChatbotProxyView.as_view(), name='chatbot-proxy'),
 ]
 
 # example:
