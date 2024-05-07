@@ -32,6 +32,7 @@ class Product(models.Model): # declare a model class
     width_field     = models.IntegerField(default=0)
     created         = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated         = models.DateTimeField(auto_now=True, auto_now_add=False)
+    category        = models.CharField(max_length=50, default="")
 
     def __str__(self):
         return self.name
