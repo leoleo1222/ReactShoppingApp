@@ -15,3 +15,4 @@ isem3027_server/chatbot_proxy/__pycache__
 
 isem3027_server/venv
 .DS_Store
+*.sqlite3
