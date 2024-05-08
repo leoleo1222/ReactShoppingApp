@@ -80,17 +80,17 @@ export default function ProfileScreen() {
         <Text style={styles.sectionTitle}>Wishlist</Text>
       </TouchableOpacity>
       {wishlistVisible && (
-    <View style={styles.dropdownContent}>
-        {wishlistData.map(item => (
+        <View style={styles.dropdownContent}>
+          {wishlistData.map((item) => (
             <View key={item.id} style={styles.detailContainer}>
-                <Text style={styles.detailLabel}>Product Name:</Text>
-                <Text style={styles.detailText}>{item.productName}</Text>
-                <Text style={styles.detailLabel}>Price:</Text>
-                <Text style={styles.detailText}>{item.price}</Text>
+              <Text style={styles.detailLabel}>Product Name:</Text>
+              <Text style={styles.detailText}>{item.productName}</Text>
+              <Text style={styles.detailLabel}>Price:</Text>
+              <Text style={styles.detailText}>{item.price}</Text>
             </View>
-        ))}
-    </View>
-)}
+          ))}
+        </View>
+      )}
 
       {/* Settings, Payment Methods, Reviews and Ratings, Rewards and Loyalty Points, Support and Help */}
       {/* Implement similar dropdown functionality for these sections */}
