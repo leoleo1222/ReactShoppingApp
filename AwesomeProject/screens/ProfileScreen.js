@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import TransactionsScreen from './TransactionsScreen'; // Import the TransactionsScreen component
+
+
 export default function ProfileScreen() {
   // State variables to control dropdown visibility
   const [orderHistoryVisible, setOrderHistoryVisible] = useState(false);
@@ -57,18 +60,10 @@ export default function ProfileScreen() {
       >
         <Text style={styles.sectionTitle}>Order History</Text>
       </TouchableOpacity>
+
       {orderHistoryVisible && (
         <View style={styles.dropdownContent}>
-          {orderHistoryData.map((order) => (
-            <View key={order.id} style={styles.detailContainer}>
-              <Text style={styles.detailLabel}>Order Number:</Text>
-              <Text style={styles.detailText}>{order.orderNumber}</Text>
-              <Text style={styles.detailLabel}>Date:</Text>
-              <Text style={styles.detailText}>{order.date}</Text>
-              <Text style={styles.detailLabel}>Total:</Text>
-              <Text style={styles.detailText}>{order.total}</Text>
-            </View>
-          ))}
+          <TransactionsScreen />
         </View>
       )}
 
@@ -133,7 +128,7 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontWeight: "bold",
     marginRight: 5,
-    color: "#4267B2", // Facebook's brand color
+    color: "#4267B2",
   },
   detailText: {},
 });

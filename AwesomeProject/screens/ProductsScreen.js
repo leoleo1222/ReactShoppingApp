@@ -112,16 +112,16 @@ export default function ProductsScreen({ navigation }) {
                 style={styles.productImage}
               />
               <View style={styles.productInfo}>
-                <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.productPrice}>Price: {item.price}</Text>
+                <Text style={styles.productPricee}>{item.name}</Text>
+                <Text style={styles.productPrice}>Price: </Text><Text>{item.price}</Text>
                 <Text style={styles.productPrice}>
-                  Discount: {item.discount}
+                  Discount: </Text><Text>{item.discount}
                 </Text>
                 <Text style={styles.productPrice}>
-                  Quantity: {item.quantity}
+                  Quantity: </Text><Text>{item.quantity}
                 </Text>
                 <Text style={styles.productPrice}>
-                  Description: {item.description}
+                  Description: </Text><Text>{item.description}
                 </Text>
                 <Button title="Order Now" onPress={() => pressHandler(item)} />
               </View>
@@ -206,8 +206,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   productPrice: {
-    fontFamily: "Arial",
-    fontSize: 16,
-    marginBottom: 5,
+    fontWeight: "bold",
+    marginRight: 5,
+    color: "#4267B2",
+  },
+  productPricee: {
+    fontWeight: "bold",
+    marginRight: 5,
+    color: "#000000",
+    // larger text
+    fontSize: 20,
   },
 });

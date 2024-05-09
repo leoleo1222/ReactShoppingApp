@@ -1,72 +1,142 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
-import { getOrders } from '../services/api';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 
 export default function TransactionsScreen({ navigation }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [ordersList, setOrdersList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [ordersList, setOrdersList] = useState([]);
+  const [userToken, setUserToken] = useState(null); // State to store user token
 
-    
-    // function to call api then update the product data
-    async function fetchOrders() {
-        setIsLoading(true);
-        console.log("fetching transaction list from server ...");
-        const transactionsList = await getOrders();
-        setOrdersList(transactionsList);
-        setIsLoading(false);
+  const getOrders = async (token) => {
+    const endpoint = "http://127.0.0.1:8000/api/orders/";
+    const method = "GET";
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Token ${token}`,
+    };
+
+    try {
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: headers,
+      });
+
+      if (!response.ok) {
+        throw new Error("Cannot fetch any orders");
+      }
+
+      const jsonResponse = await response.json();
+      setOrdersList(jsonResponse);
+      return jsonResponse;
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      return { error: "Cannot fetch any orders" };
     }
+  };
 
-    // useEffect hook run immediately when the screen loaded
-    useEffect(() => {
-        fetchOrders();
-    }, [])
+  const fetchToken = () => {
+    fetch("http://127.0.0.1:8000/api/api-token-auth/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: "a",
+        password: "a",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUserToken(data.token);
+        fetchOrders(data.token);
+      })
+      .catch((error) => console.error("Error fetching token:", error));
+  };
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.topText}>Transaction Records</Text>
-            {ordersList.length > 0 ?
-                <FlatList
-                    data={ordersList}
-                    keyExtractor={(item, index) => index.toString()}
+  const fetchOrders = async (token) => {
+    setIsLoading(true);
+    await getOrders(token);
+    setIsLoading(false);
+  };
 
-                    renderItem={({item}) => (
-                        <View>
-                            <Text>Invoice: {item.invoice_no}</Text>
-                            <Text>Product: {item.product.name}</Text>
-                            <Text>Quantity: {item.quantity}</Text>
-                            <Text>Price: {item.total_amount}</Text>
-                            <Text>Delivery Date: {item.delivery_date}</Text>
-                        </View>
-                    )}
-                    refreshing={isLoading}
-                    onRefresh={()=>fetchOrders()}
-                /> :
-                <View style={styles.emptyView}>
-                    <Text>No Transction records</Text>
-                    <Button title="Refresh" onPress={() => fetchOrders()} />
-                </View>
-            }
+  useEffect(() => {
+    fetchToken();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#007bff" />
+      ) : ordersList.length > 0 ? (
+        <FlatList
+          data={ordersList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.itemContainer}>
+              <Text style={styles.itemText}>Invoice:</Text><Text style={styles.detailText}> {item.invoice_no}</Text>
+              <Text style={styles.itemText}>Product:</Text><Text style={styles.detailText}> {item.product.name}</Text>
+              <Text style={styles.itemText}>Quantity:</Text><Text style={styles.detailText}> {item.quantity}</Text>
+              <Text style={styles.itemText}>Price:</Text><Text style={styles.detailText}> {item.total_amount}</Text>
+              <Text style={styles.itemText}>Delivery Date: </Text><Text style={styles.detailText}>
+                {item.delivery_date}
+              </Text>
+            </View>
+          )}
+        />
+      ) : (
+        <View style={styles.emptyView}>
+          <Text style={styles.emptyText}>No Transaction records</Text>
+          <Button
+            title="Refresh"
+            onPress={() => fetchOrders(userToken)}
+            color="#007bff"
+          />
         </View>
-    )
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    emptyView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    topText: {
-        marginTop: 30,
-        marginBottom: 20,
-        fontSize: 20,
-        fontWeight: "bold",
-        textAlign: "center",
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: "#f8f9fa",
+    paddingHorizontal: 20,
+    paddingTop: 50,
+  },
+  emptyView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  topText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  itemContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 20,
+    marginBottom: 20,
+    elevation: 4,
+  },
+  itemText: {
+    fontWeight: "bold",
+    marginRight: 5,
+    color: "#4267B2",
+  },
+  detailText: {},
+  emptyText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+});
