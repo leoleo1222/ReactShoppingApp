@@ -6,34 +6,16 @@ export default function ProductsScreen({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [productsList, setProductsList] = useState([
-        {
-            "id": 1,
-            "name": "pearl",
-            "price": "99.99",
-            "discount": 1.0,
-            "quantity": 10,
-            "description": "This is a pearl",
-            "picture": "",
-            "created": "2018-12-22",
-            "updated": "2019-02-16"
-        },
-        {
-            "id": 2,
-            "name": "Apple",
-            "price": "1.99",
-            "discount": 1.0,
-            "quantity": 90,
-            "description": "This is an apple",
-            "picture": "",
-            "created": "2018-12-22",
-            "updated": "2019-02-16"
-        }
-    ]);
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        // Fetch token when component mounts
+        fetchToken();
+    }, []);
 
     useEffect(() => {
         setFilteredProducts(filterProducts());
-    }, [searchQuery]);
+    }, [searchQuery, products]); // Update filtered products when searchQuery or products change
 
     const pressHandler = (product) => {
         navigation.navigate('Order', {
@@ -41,17 +23,43 @@ export default function ProductsScreen({ navigation }) {
         });
     };
 
-    const fetchProducts = () => {
-        setIsLoading(true);
-        console.log("Fetching product list from server ...");
-        // Simulate fetching data from server
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
+    const fetchToken = () => {
+        fetch("http://127.0.0.1:8000/api/api-token-auth/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: "a",
+            password: "a",
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Token fetched:", data.token);
+            fetchProducts(data.token); // Call fetchProducts with the token
+          })
+          .catch((error) => console.error("Error fetching token:", error));
+      };
+    
+    const fetchProducts = (token) => {
+        fetch("http://127.0.0.1:8000/api/product/", {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setProducts(data);
+            console.log("Products fetched:", data);
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+          });
     };
 
     const filterProducts = () => {
-        return productsList.filter(product =>
+        return products.filter(product =>
             product.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
     };
