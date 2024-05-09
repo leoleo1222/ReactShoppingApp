@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,50 +7,50 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import TransactionsScreen from './TransactionsScreen'; // Import the TransactionsScreen component
-
+import TransactionsScreen from "./TransactionsScreen"; // Import the TransactionsScreen component
 
 export default function ProfileScreen() {
   // State variables to control dropdown visibility
   const [orderHistoryVisible, setOrderHistoryVisible] = useState(false);
-  const [wishlistVisible, setWishlistVisible] = useState(false);
-
-  // Mock data for Order History and Wishlist
-  const orderHistoryData = [
-    { id: 1, orderNumber: "ORD123", date: "2024-05-01", total: "$100" },
-    { id: 2, orderNumber: "ORD124", date: "2024-04-25", total: "$150" },
-  ];
-
-  const wishlistData = [
-    { id: 1, productName: "Product 1", price: "$50" },
-    { id: 2, productName: "Product 2", price: "$75" },
-  ];
-
+  const [userData, setUserData] = useState(null); // State to hold user data
+  // Fetch user data when the component mounts
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+  // Function to fetch user data from the API
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/admin/account/hkbu"
+      );
+      const data = await response.json();
+      setUserData(data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* User Details */}
+      <TouchableOpacity
+        style={[styles.tab, { marginTop: 20 }]} // Adjust margin top for proper spacing
+        onPress={() => setOrderHistoryVisible(!orderHistoryVisible)}
+      >
+        <Text style={styles.sectionTitle}>User Detail</Text>
+      </TouchableOpacity>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>User Details</Text>
-        <View style={styles.detailContainer}>
-          <Text style={styles.detailLabel}>Name:</Text>
-          <Text style={styles.detailText}>John Doe</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <Text style={styles.detailLabel}>Email:</Text>
-          <Text style={styles.detailText}>john.doe@example.com</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <Text style={styles.detailLabel}>Phone:</Text>
-          <Text style={styles.detailText}>+1234567890</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <Text style={styles.detailLabel}>Shipping Address:</Text>
-          <Text style={styles.detailText}>123 Main St, City, Country</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <Text style={styles.detailLabel}>Billing Address:</Text>
-          <Text style={styles.detailText}>456 Elm St, City, Country</Text>
-        </View>
+        {userData && (
+          <>
+            <View style={styles.detailContainer}>
+              <Text style={styles.detailLabel}>Username:</Text>
+              <Text style={styles.detailText}>{userData.username}</Text>
+            </View>
+            <View style={styles.detailContainer}>
+              <Text style={styles.detailLabel}>Email:</Text>
+              <Text style={styles.detailText}>{userData.email}</Text>
+            </View>
+          </>
+        )}
       </View>
 
       {/* Order History */}
@@ -66,29 +66,6 @@ export default function ProfileScreen() {
           <TransactionsScreen />
         </View>
       )}
-
-      {/* Wishlist */}
-      <TouchableOpacity
-        style={styles.tab}
-        onPress={() => setWishlistVisible(!wishlistVisible)}
-      >
-        <Text style={styles.sectionTitle}>Wishlist</Text>
-      </TouchableOpacity>
-      {wishlistVisible && (
-        <View style={styles.dropdownContent}>
-          {wishlistData.map((item) => (
-            <View key={item.id} style={styles.detailContainer}>
-              <Text style={styles.detailLabel}>Product Name:</Text>
-              <Text style={styles.detailText}>{item.productName}</Text>
-              <Text style={styles.detailLabel}>Price:</Text>
-              <Text style={styles.detailText}>{item.price}</Text>
-            </View>
-          ))}
-        </View>
-      )}
-
-      {/* Settings, Payment Methods, Reviews and Ratings, Rewards and Loyalty Points, Support and Help */}
-      {/* Implement similar dropdown functionality for these sections */}
     </ScrollView>
   );
 }
