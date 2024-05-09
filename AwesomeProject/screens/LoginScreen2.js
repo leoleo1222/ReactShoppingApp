@@ -11,6 +11,7 @@ import {
   StatusBar,
   Modal,
 } from "react-native";
+import {apiLogin, apiRegister} from "../services/api";
 
 // LoginScreen2.propTypes = {
 //   register: PropTypes.bool,
@@ -21,25 +22,26 @@ import {
 // };
 
 // Placeholder functions for handling login and register navigation
-const handleLogin = () => {
-  console.log("login");
-};
+const handleSignUp = () => {};
+
 
 const handleForgotPassword = () => {
   console.log("Forgot Password");
 };
 
 const handleRegisterNavigation = () => {
-  console.log("navigate to register");
-  // navigation.navigate('Login');
+  // console.log("navigate to register");
+  navigation.navigate('Register');
 };
+
 
 const googleLogo = require("../assets/images/google-logo.png");
 const facebookLogo = require("../assets/images/facebook-logo.png");
 const AppleLogo = require("../assets/images/apple-logo.png");
 const Logo = require("../assets/images/logo.png");
 
-export default function LoginScreen2(register = false, { navigation }) {
+export default function LoginScreen2({ navigation }) {
+  var register = false;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -49,14 +51,28 @@ export default function LoginScreen2(register = false, { navigation }) {
     console.log(`Login with ${service}`);
     setMaintenancePopup(true); // Show maintenance popup
   };
+
+  const handleLogin = useCallback(() => {
+    const data = { email, password };
+    apiLogin(data);
+  }, [email, password]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#FFFFFF" />
 
       <View style={styles.container}>
-        <Text style={styles.title}>Let's Sign You In</Text>
-        <Text style={styles.subtitle}>Welcome back, you've been missed!</Text>
-
+      {!register ?
+      ( <Fragment>
+          <Text style={styles.title}>Let's Sign You In</Text>
+          <Text style={styles.subtitle}>Welcome back, you've been missed!</Text>
+        </Fragment>):
+      (
+        <Fragment>
+          <Text style={styles.title}>Welcome</Text>
+          <Text style={styles.subtitle}>Nice to meet You!</Text>
+        </Fragment>)
+      }
         <View style={styles.inputContainer}>
           <Text style={styles.inputHint}>Email</Text>
 
@@ -85,7 +101,7 @@ export default function LoginScreen2(register = false, { navigation }) {
           </View>
         </View>
         {/* Add eye icon for password visibility */}
-        {register ? null : (
+        {!register ? null : (
           <View style={styles.inputContainer}>
             <Text style={styles.inputHint}>Retype Password</Text>
             <View style={styles.inputIcon}>
@@ -100,7 +116,13 @@ export default function LoginScreen2(register = false, { navigation }) {
             </View>
           </View>
         )}
-        {!register ? null : (
+        {!register ? 
+        (            
+        <TouchableOpacity style={styles.signInButton} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>SIGN UP</Text>
+          {/* Add arrow icon */}
+        </TouchableOpacity>)
+         : (
           <Fragment>
             <TouchableOpacity style={styles.signInButton} onPress={handleLogin}>
               <Text style={styles.buttonText}>SIGN IN</Text>

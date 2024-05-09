@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  Button,
-  TextInput,
-} from "react-native";
+  StyleSheet, Text, View, FlatList, TouchableOpacity, Image,
+  Button, TextInput, ActivityIndicator
+} from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function ProductsScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetchToken();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -25,44 +20,20 @@ export default function ProductsScreen({ navigation }) {
   }, [searchQuery, products]);
 
   const pressHandler = (product) => {
-    navigation.navigate("Order", {
-      product: product,
-    });
+    navigation.navigate('Order', { product });
   };
 
-  const fetchToken = () => {
-    fetch("http://127.0.0.1:8000/api/api-token-auth/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "a",
-        password: "a",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Token fetched:", data.token);
-        fetchProducts(data.token);
-      })
-      .catch((error) => console.error("Error fetching token:", error));
-  };
-
-  const fetchProducts = (token) => {
-    fetch("http://127.0.0.1:8000/api/product/", {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-        console.log("Products fetched:", data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/product/');
+      const data = await response.json();
+      setProducts(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setIsLoading(false);
+    }
   };
 
   const filterProducts = () => {
@@ -74,67 +45,49 @@ export default function ProductsScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text
-          style={[
-            styles.title,
-            {
-              color: "#0066cc",
-              fontFamily: "Arial",
-              fontSize: 24,
-              fontWeight: "bold",
-            },
-          ]}
-        >
-          Our Products
-        </Text>
+        <Text style={styles.title}>Our Products</Text>
         <TextInput
           style={styles.searchInput}
           placeholder="Search Products"
-          placeholderTextColor="#999"
-          onChangeText={(text) => setSearchQuery(text)}
+          onChangeText={setSearchQuery}
           value={searchQuery}
         />
       </View>
-      {filteredProducts.length > 0 ? (
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : filteredProducts.length > 0 ? (
         <FlatList
           data={filteredProducts}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.productItemContainer}
-              onPress={() => pressHandler(item)}
-            >
-              {/* <Image source={{ uri: item.imageUrl }} style={styles.productImage} /> */}
+            <TouchableOpacity style={styles.productItemContainer} onPress={() => pressHandler(item)}>
               <Image
-                source={{
-                  uri: "https://i.pinimg.com/736x/90/d5/21/90d5218e67406acdae9c83a2a3fddcca.jpg",
-                }}
+                // source={{ uri: item.picture || 'https://via.placeholder.com/100' }}
+                source={{ uri: item.url || 'https://via.placeholder.com/100' }}
                 style={styles.productImage}
+                // defaultSource={require('./path/to/local/placeholder.png')}
               />
               <View style={styles.productInfo}>
-                <Text style={styles.productPricee}>{item.name}</Text>
-                <Text style={styles.productPrice}>Price: </Text><Text>{item.price}</Text>
-                <Text style={styles.productPrice}>
-                  Discount: </Text><Text>{item.discount}
-                </Text>
-                <Text style={styles.productPrice}>
-                  Quantity: </Text><Text>{item.quantity}
-                </Text>
-                <Text style={styles.productPrice}>
-                  Description: </Text><Text>{item.description}
-                </Text>
+                <Text style={styles.productName}>{item.name}</Text>
+                <Text style={styles.productPrice}>${item.price}</Text>
+                {parseFloat(item.discount) > 0 && (
+                  <Text style={styles.productPrice}>Discount: {item.discount}</Text>
+                )}
+                {/* <Text style={styles.productPrice}>Discount: {item.discount}</Text> */}
+                {/* <Text style={styles.productPrice}>Quantity: {item.quantity}</Text> */}
+                <Text style={styles.productDescription}>{item.description}</Text>
                 <Button title="Order Now" onPress={() => pressHandler(item)} />
               </View>
             </TouchableOpacity>
           )}
           refreshing={isLoading}
-          onRefresh={() => fetchProducts()}
+          onRefresh={fetchProducts}
           contentContainerStyle={styles.productList}
         />
       ) : (
         <View style={styles.emptyView}>
           <Text style={styles.emptyText}>No Products Found</Text>
-          <Button title="Refresh" onPress={() => fetchProducts()} />
+          <Button title="Refresh" onPress={fetchProducts} />
         </View>
       )}
     </View>
@@ -144,20 +97,20 @@ export default function ProductsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: '#ccc',
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   searchInput: {
     flex: 1,
@@ -165,56 +118,60 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 16,
   },
   productList: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   emptyView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   emptyText: {
-    fontFamily: "Arial",
+    fontFamily: 'Arial',
     fontSize: 18,
     marginBottom: 20,
   },
   productItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: '#ccc',
     paddingBottom: 10,
+    marginLeft: 5,  // Reduced margin to increase width
+    marginRight: 5,  // Reduced margin to increase width
+    flex: 1,  // Ensures it stretches to fill available space horizontally
   },
   productImage: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
     marginRight: 20,
   },
   productInfo: {
     flex: 1,
   },
   productName: {
-    fontFamily: "Arial",
-    fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: 'Arial',
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 5,
   },
   productPrice: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginRight: 5,
-    color: "#4267B2",
+    color: '#4267B2',
+    marginBottom: 3,
   },
-  productPricee: {
-    fontWeight: "bold",
-    marginRight: 5,
-    color: "#000000",
-    // larger text
-    fontSize: 20,
+  productDescription: {
+    fontFamily: 'Arial',
+    fontSize: 16,
+    color: '#aaa',
+    marginTop: 3,
+    marginBottom: 10,
   },
 });

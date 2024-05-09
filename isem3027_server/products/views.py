@@ -18,6 +18,8 @@ from rest_framework.generics import (
 )
 from rest_framework.views import APIView  # 導入 APIView
 from rest_framework.response import Response
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 
 from .serializers import UserSerializer, ProductSerializer
 from .models import Product
@@ -81,6 +83,14 @@ class ProductView(APIView):
                 return Response(serializer.data)
 
         def post(self, request):
+            image = request.data.get('picture')
+            # Convert base64 image to image file
+            if image:
+                image_data = image.split(';base64,')[1]
+                image_file = ContentFile(base64.b64decode(image_data))
+                image_path = default_storage.save('path/to/save/image.jpg', image_file)
+                # Save the image path to the product instance
+                serializer.validated_data['picture'] = image_path
             serializer = ProductSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -160,7 +170,7 @@ class AccountView(APIView):
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-from rest_framework.response import Response
+
 
 class ChatbotProxyView(APIView):
 

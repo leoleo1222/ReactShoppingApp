@@ -130,7 +130,8 @@ const ChatBotScreen = () => {
           ...prevHistory,
           { text: response, sender: "bot" },
         ]);
-      } else if (option === "What product is on sale?" && token) {
+      // } else if (option === "What product is on sale?" && token) {
+      } else if (option === "What product is on sale?") {
         console.log("Fetching products...");
         // Fetch product data from Django only if token is available
         fetchProducts();
@@ -162,9 +163,9 @@ const ChatBotScreen = () => {
   const fetchProducts = () => {
     // Fetch product data from Django API endpoint with token in headers
     fetch("http://127.0.0.1:8000/api/product/", {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
+      // headers: {
+      //   Authorization: `Token ${token}`,
+      // },
     })
       .then((response) => response.json())
       .then((data) => {

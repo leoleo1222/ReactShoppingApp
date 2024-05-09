@@ -87,6 +87,9 @@ export default function TransactionsScreen({ navigation }) {
               <Text style={styles.itemText}>Delivery Date: </Text><Text style={styles.detailText}>
                 {item.delivery_date}
               </Text>
+              <Text style={styles.itemText}>Status: </Text><Text style={styles.detailText}>
+                {item.stutus}
+              </Text>
             </View>
           )}
         />

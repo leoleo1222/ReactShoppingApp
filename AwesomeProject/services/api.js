@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-var BASE_API_URL = "http://127.0.0.1:8000/api/";
+var BASE_API_URL = "http://192.168.1.225:8000/api/";
 
 const loginErrorMessage = "username/password incorrect"
 const applicationErrorMessage = "Application ran wrong"
@@ -27,6 +27,10 @@ export const apiLogin = async (data) => {
             return response.json() // parses response to JSON format
         })
         .then(jsonResponse => {
+            let token = jsonResponse.token;
+            AsyncStorage.setItem('userToken', token);
+            AsyncStorage.setItem('user_id', user_id);
+            AsyncStorage.setItem('username', username);
             return jsonResponse;
         })
         .catch(err => {
@@ -63,14 +67,14 @@ export const apiRegister = async (data) => {
 
 
 export const getProducts = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
+    // const userToken = await AsyncStorage.getItem('userToken');
 
     const endpoint = BASE_API_URL + "products/";
     const method = "GET";
     const headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "Authorization": `Token ${userToken}`
+        // "Authorization": `Token ${userToken}`
     };
 
     return fetch(endpoint, {
@@ -89,13 +93,13 @@ export const getProducts = async () => {
 }
 
 export const getProduct = async (id) => {
-    const userToken = await AsyncStorage.getItem('userToken');
+    // const userToken = await AsyncStorage.getItem('userToken');
     const endpoint = BASE_API_URL + `product/${id}/`;
     const method = "GET";
     const headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "Authorization": `Token ${userToken}`
+        // "Authorization": `Token ${userToken}`
     };
 
     return fetch(endpoint, {

@@ -39,11 +39,11 @@ export default function MainStackNavigator() {
             component={BottomTabNavigator}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Login"
             component={LoginScreen2}
             options={{ headerShown: false }}
-          />        
+          />         */}
       </Stack.Navigator>
     </NavigationContainer>
   );

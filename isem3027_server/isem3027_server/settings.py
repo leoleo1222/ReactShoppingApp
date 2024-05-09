@@ -61,11 +61,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:19006",
-    "https://api.openai.com"
-    # Add other origins as needed
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:19006",
+#     "https://api.openai.com"
+#     # Add other origins as needed
+# ]
+
+CORS_ALLOWED_ORIGINS = []
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'isem3027_server.urls'
 
