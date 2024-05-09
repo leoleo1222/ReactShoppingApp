@@ -1,131 +1,213 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button, TextInput } from 'react-native';
-import ProductItem from '../components/ProductItem';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Button,
+  TextInput,
+} from "react-native";
 
 export default function ProductsScreen({ navigation }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-        // Fetch token when component mounts
-        fetchToken();
-    }, []);
+  useEffect(() => {
+    fetchToken();
+  }, []);
 
-    useEffect(() => {
-        setFilteredProducts(filterProducts());
-    }, [searchQuery, products]); // Update filtered products when searchQuery or products change
+  useEffect(() => {
+    setFilteredProducts(filterProducts());
+  }, [searchQuery, products]);
 
-    const pressHandler = (product) => {
-        navigation.navigate('Order', {
-            product: product
-        });
-    };
+  const pressHandler = (product) => {
+    navigation.navigate("Order", {
+      product: product,
+    });
+  };
 
-    const fetchToken = () => {
-        fetch("http://127.0.0.1:8000/api/api-token-auth/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: "a",
-            password: "a",
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Token fetched:", data.token);
-            fetchProducts(data.token); // Call fetchProducts with the token
-          })
-          .catch((error) => console.error("Error fetching token:", error));
-      };
-    
-    const fetchProducts = (token) => {
-        fetch("http://127.0.0.1:8000/api/product/", {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            setProducts(data);
-            console.log("Products fetched:", data);
-          })
-          .catch((error) => {
-            console.error("Error fetching products:", error);
-          });
-    };
+  const fetchToken = () => {
+    fetch("http://127.0.0.1:8000/api/api-token-auth/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: "a",
+        password: "a",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Token fetched:", data.token);
+        fetchProducts(data.token);
+      })
+      .catch((error) => console.error("Error fetching token:", error));
+  };
 
-    const filterProducts = () => {
-        return products.filter(product =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    };
+  const fetchProducts = (token) => {
+    fetch("http://127.0.0.1:8000/api/product/", {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data);
+        console.log("Products fetched:", data);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  };
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={[styles.title, { color: '#0066cc' }]}>Products</Text>
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Search products..."
-                    onChangeText={(text) => setSearchQuery(text)}
-                    value={searchQuery}
-                />
-            </View>
-            {filteredProducts.length > 0 ?
-                <FlatList
-                    data={filteredProducts}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <ProductItem
-                            item={item}
-                            pressHandler={pressHandler}
-                        />
-                    )}
-                    refreshing={isLoading}
-                    onRefresh={() => fetchProducts()}
-                /> :
-                <View style={styles.emptyView}>
-                    <Text>No Products</Text>
-                    <Button title="Refresh" onPress={() => fetchProducts()} />
-                </View>
-            }
-        </View>
+  const filterProducts = () => {
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text
+          style={[
+            styles.title,
+            {
+              color: "#0066cc",
+              fontFamily: "Arial",
+              fontSize: 24,
+              fontWeight: "bold",
+            },
+          ]}
+        >
+          Our Products
+        </Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search Products"
+          placeholderTextColor="#999"
+          onChangeText={(text) => setSearchQuery(text)}
+          value={searchQuery}
+        />
+      </View>
+      {filteredProducts.length > 0 ? (
+        <FlatList
+          data={filteredProducts}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.productItemContainer}
+              onPress={() => pressHandler(item)}
+            >
+              {/* <Image source={{ uri: item.imageUrl }} style={styles.productImage} /> */}
+              <Image
+                source={{
+                  uri: "https://i.pinimg.com/736x/90/d5/21/90d5218e67406acdae9c83a2a3fddcca.jpg",
+                }}
+                style={styles.productImage}
+              />
+              <View style={styles.productInfo}>
+                <Text style={styles.productName}>{item.name}</Text>
+                <Text style={styles.productPrice}>Price: {item.price}</Text>
+                <Text style={styles.productPrice}>
+                  Discount: {item.discount}
+                </Text>
+                <Text style={styles.productPrice}>
+                  Quantity: {item.quantity}
+                </Text>
+                <Text style={styles.productPrice}>
+                  Description: {item.description}
+                </Text>
+                <Button title="Order Now" onPress={() => pressHandler(item)} />
+              </View>
+            </TouchableOpacity>
+          )}
+          refreshing={isLoading}
+          onRefresh={() => fetchProducts()}
+          contentContainerStyle={styles.productList}
+        />
+      ) : (
+        <View style={styles.emptyView}>
+          <Text style={styles.emptyText}>No Products Found</Text>
+          <Button title="Refresh" onPress={() => fetchProducts()} />
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 20,
-        paddingHorizontal: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    searchInput: {
-        flex: 1,
-        marginLeft: 10,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-    },
-    emptyView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    fontFamily: "Arial",
+    fontSize: 16,
+  },
+  productList: {
+    alignItems: "center",
+  },
+  emptyView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontFamily: "Arial",
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  productItemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingBottom: 10,
+  },
+  productImage: {
+    width: 100,
+    height: 100,
+    marginRight: 20,
+  },
+  productInfo: {
+    flex: 1,
+  },
+  productName: {
+    fontFamily: "Arial",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  productPrice: {
+    fontFamily: "Arial",
+    fontSize: 16,
+    marginBottom: 5,
+  },
 });
