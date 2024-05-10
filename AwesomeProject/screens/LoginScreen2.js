@@ -50,7 +50,7 @@ export default function LoginScreen2({ navigation }) {
 
   const handleOAuthLogin = (service) => {
     console.log(`Login with ${service}`);
-    setMaintenancePopup(true); // Show maintenance popup
+    setMaintenancePopup("This feature is under maintenance");
   };
 
   const handleLogin = useCallback(async () => {
@@ -66,7 +66,12 @@ export default function LoginScreen2({ navigation }) {
   
       if (!response.ok) {
         // Handle error if response is not OK
-        console.error("Login failed");
+        if (response.status === 400) {
+          // If response status is 400, display the modal for incorrect password or username
+          setMaintenancePopup("Incorrect username or password");
+        } else {
+          console.error("Login failed");
+        }
         return;
       }
   
@@ -83,6 +88,7 @@ export default function LoginScreen2({ navigation }) {
       console.error("Error:", error);
     }
   }, [Username, password, navigation]);
+  
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -219,7 +225,7 @@ export default function LoginScreen2({ navigation }) {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>In Maintenance</Text>
+            <Text style={styles.modalText}>{maintenancePopup}</Text>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                 onPress={() => {
