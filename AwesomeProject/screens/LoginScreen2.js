@@ -11,7 +11,8 @@ import {
   StatusBar,
   Modal,
 } from "react-native";
-import {apiLogin, apiRegister} from "../services/api";
+import { apiLogin } from "../services/api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // LoginScreen2.propTypes = {
 //   register: PropTypes.bool,
@@ -42,7 +43,7 @@ const Logo = require("../assets/images/logo.png");
 
 export default function LoginScreen2({ navigation }) {
   var register = false;
-  const [email, setEmail] = useState("");
+  const [Username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [maintenancePopup, setMaintenancePopup] = useState(false); // State variable for showing maintenance popup
@@ -52,10 +53,36 @@ export default function LoginScreen2({ navigation }) {
     setMaintenancePopup(true); // Show maintenance popup
   };
 
-  const handleLogin = useCallback(() => {
-    const data = { email, password };
-    apiLogin(data);
-  }, [email, password]);
+  const handleLogin = useCallback(async () => {
+    try {
+      const data = { username: Username, password }; // Modify the data object to match API requirements
+      const response = await fetch("http://127.0.0.1:8000/api/api-token-auth/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        // Handle error if response is not OK
+        console.error("Login failed");
+        return;
+      }
+  
+      const responseData = await response.json();
+      const { token } = responseData;
+  
+      // Store token in AsyncStorage
+      await AsyncStorage.setItem("token", token);
+  
+      // Redirect or update state accordingly
+      // For example, navigate to the next screen
+      navigation.navigate("Products");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }, [Username, password, navigation]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -74,15 +101,15 @@ export default function LoginScreen2({ navigation }) {
         </Fragment>)
       }
         <View style={styles.inputContainer}>
-          <Text style={styles.inputHint}>Email</Text>
+          <Text style={styles.inputHint}>Username</Text>
 
           <View style={styles.inputIcon}>
             <MaterialCommunityIcons name="account" size={20} color="#8F92A1" />
             <TextInput
               style={styles.input}
-              onChangeText={setEmail}
-              value={email}
-              placeholder="Email"
+              onChangeText={setUsername}
+              value={Username}
+              placeholder="Username"
             />
           </View>
         </View>
@@ -118,19 +145,12 @@ export default function LoginScreen2({ navigation }) {
         )}
         {!register ? 
         (            
-        <TouchableOpacity style={styles.signInButton} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>SIGN UP</Text>
+          <TouchableOpacity style={styles.signInButton} onPress={handleLogin}>
+          <Text style={styles.buttonText}>SIGN IN</Text>
           {/* Add arrow icon */}
         </TouchableOpacity>)
          : (
           <Fragment>
-            <TouchableOpacity style={styles.signInButton} onPress={handleLogin}>
-              <Text style={styles.buttonText}>SIGN IN</Text>
-              {/* Add arrow icon */}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleForgotPassword}>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
           </Fragment>
         )}
 
