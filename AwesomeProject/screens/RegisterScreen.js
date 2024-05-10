@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { apiLogin } from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from '@expo/vector-icons';
 
 // Placeholder functions for handling login and register navigation
 const handleSignUp = () => {};
@@ -156,7 +157,7 @@ export default function LoginScreen2({ navigation }) {
           <Text style={styles.inputHint}>Username</Text>
 
           <View style={styles.inputIcon}>
-            <MaterialCommunityIcons name="account" size={20} color="#8F92A1" />
+            <FontAwesome name="user" size={20} color="#8F92A1" />
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
@@ -169,7 +170,7 @@ export default function LoginScreen2({ navigation }) {
         <View style={styles.inputContainer}>
           <Text style={styles.inputHint}>Password</Text>
           <View style={styles.inputIcon}>
-            <MaterialCommunityIcons name="lock" size={20} color="#8F92A1" />
+            <FontAwesome name="lock" size={20} color="#8F92A1" />
             <TextInput
               style={styles.input}
               onChangeText={setPassword}
@@ -184,7 +185,7 @@ export default function LoginScreen2({ navigation }) {
           <View style={styles.inputContainer}>
             <Text style={styles.inputHint}>Retype Password</Text>
             <View style={styles.inputIcon}>
-              <MaterialCommunityIcons name="lock" size={20} color="#8F92A1" />
+              <FontAwesome name="lock" size={20} color="#8F92A1" />
               <TextInput
                 style={styles.input}
                 onChangeText={setPassword2}
@@ -216,7 +217,7 @@ export default function LoginScreen2({ navigation }) {
             }}
           >
             <View style={styles.line} />
-            <Text style={styles.orSignInWithText}>Or sign in with</Text>
+            <Text style={styles.orSignInWithText}>Or sign up with</Text>
             <View style={styles.line} />
           </View>
         ) : (
@@ -228,7 +229,7 @@ export default function LoginScreen2({ navigation }) {
             }}
           >
             <View style={styles.line} />
-            <Text style={styles.orSignInWithText}>Or sign up with</Text>
+            <Text style={styles.orSignInWithText}>Or sign in with</Text>
             <View style={styles.line} />
           </View>
         )}
@@ -258,8 +259,10 @@ export default function LoginScreen2({ navigation }) {
 
         <View style={styles.registerTextContainer}>
           <Text style={styles.registerText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={toggleRegistrationModal}>
-            <Text style={styles.registerButtonText}>Sign up here</Text>
+          <TouchableOpacity onPress={() => {
+              navigation.navigate('Login');
+            }}>
+            <Text style={styles.registerButtonText}>Sign in here</Text>
           </TouchableOpacity>
         </View>
         <Modal
@@ -358,7 +361,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 35,
-    paddingTop: 148,
+    paddingTop: 100,
     height: 812, // Fixed height could be problematic, consider using flex
   },
   title: {

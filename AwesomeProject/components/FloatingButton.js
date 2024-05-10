@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function FloatingButton() {
     const navigation = useNavigation();
     const navState = useNavigationState(state => state);
-    const list = ['ChatBot', "Login"];
+    const list = ['ChatBot', "Login", "Register"];
     // Function to determine if the current tab screen is 'ChatBot'
     const isCurrentScreenChatBot = () => {
         // This assumes you are navigating within a Tab Navigator

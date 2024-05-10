@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { apiLogin } from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from '@expo/vector-icons';
 
 // LoginScreen2.propTypes = {
 //   register: PropTypes.bool,
@@ -42,6 +43,7 @@ const Logo = require("../assets/images/logo.png");
 export default function LoginScreen2({ navigation }) {
   var register = false;
   const [Username, setUsername] = useState("");
+  const [role, setRole] = useState("user");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [maintenancePopup, setMaintenancePopup] = useState(false); // State variable for showing maintenance popup
@@ -64,7 +66,7 @@ export default function LoginScreen2({ navigation }) {
 
   const handleLogin = useCallback(async () => {
     try {
-      const data = { username: Username, password }; // Modify the data object to match API requirements
+      const data = { username: Username, password: password, role: role }; // Modify the data object to match API requirements
       const response = await fetch(
         "http://127.0.0.1:8000/api/api-token-auth/",
         {
@@ -164,7 +166,7 @@ export default function LoginScreen2({ navigation }) {
           <Text style={styles.inputHint}>Username</Text>
 
           <View style={styles.inputIcon}>
-            <MaterialCommunityIcons name="account" size={20} color="#8F92A1" />
+            <FontAwesome name="user" size={20} color="#8F92A1" />
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
@@ -177,7 +179,7 @@ export default function LoginScreen2({ navigation }) {
         <View style={styles.inputContainer}>
           <Text style={styles.inputHint}>Password</Text>
           <View style={styles.inputIcon}>
-            <MaterialCommunityIcons name="lock" size={20} color="#8F92A1" />
+            <FontAwesome name="lock" size={20} color="#8F92A1" />
             <TextInput
               style={styles.input}
               onChangeText={setPassword}
@@ -211,7 +213,9 @@ export default function LoginScreen2({ navigation }) {
         ) : (
           <Fragment></Fragment>
         )}
-
+        <TouchableOpacity onPress={() => setRole(role === 'user' ? 'admin' : 'user')}>
+            <Text style={styles.registerButtonText}>{role}</Text>
+        </TouchableOpacity>
         {register ? (
           <View
             style={{
