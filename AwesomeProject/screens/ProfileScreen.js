@@ -6,13 +6,24 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import TransactionsScreen from "./TransactionsScreen"; // Import the TransactionsScreen component
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
   // State variables to control dropdown visibility
   const [orderHistoryVisible, setOrderHistoryVisible] = useState(false);
   const [userData, setUserData] = useState(null); // State to hold user data
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("role");
+    console.log("Removed token from async storage");
+    navigation.navigate("Products");
+    window.location.reload();
+  };
+  
+
   // Fetch user data when the component mounts
   useEffect(() => {
     fetchUserData();
@@ -32,6 +43,12 @@ export default function ProfileScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* User Details */}
+      <View style={styles.logoutButtonContainer}>
+        <TouchableOpacity style={styles.logoutButton}
+        onPress={() => handleLogout()}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity
         style={[styles.tab, { marginTop: 20 }]} // Adjust margin top for proper spacing
         onPress={() => setOrderHistoryVisible(!orderHistoryVisible)}
@@ -61,11 +78,9 @@ export default function ProfileScreen() {
         <Text style={styles.sectionTitle}>Order History</Text>
       </TouchableOpacity>
 
-      {orderHistoryVisible && (
-        <View style={styles.dropdownContent}>
-          <TransactionsScreen />
-        </View>
-      )}
+      <View style={styles.dropdownContent}>
+        <TransactionsScreen />
+      </View>
     </ScrollView>
   );
 }
@@ -108,4 +123,17 @@ const styles = StyleSheet.create({
     color: "#4267B2",
   },
   detailText: {},
+  logoutButtonContainer: {
+    position: 'absolute', // Use absolute position to place the button at the top right corner
+    top: 10, // Move it a bit towards the center from the top
+    right: 10, // Move it a bit towards the center from the right
+  },
+  logoutButton: {
+    backgroundColor: '#ff0000', // Change this to the desired background color
+    padding: 10, // Add some padding so it's easier to tap
+    borderRadius: 10, // Add rounded corners
+  },
+  logoutButtonText: {
+    color: '#ffffff', // Change this to the desired text color
+  },
 });

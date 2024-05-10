@@ -8,6 +8,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 export default function TransactionsScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [ordersList, setOrdersList] = useState([]);
@@ -44,36 +47,37 @@ export default function TransactionsScreen({ navigation }) {
       return { error: "Cannot fetch any orders" };
     }
   };
-  const fetchToken = async () => {
-    const username = await AsyncStorage.getItem("username");
-    const password = await AsyncStorage.getItem("password");
-    // Fetch token from Django API
-    fetch("http://127.0.0.1:8000/api/api-token-auth/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setToken(data.token);
-        console.log("Token fetched:", data.token);
-      })
-      .catch((error) => console.error("Error fetching token:", error));
-  };
+  // const fetchToken = async () => {
+  //   const username = await AsyncStorage.getItem("username");
+  //   const password = await AsyncStorage.getItem("password");
+  //   // Fetch token from Django API
+  //   fetch("http://127.0.0.1:8000/api/api-token-auth/", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       username: username,
+  //       password: password,
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setToken(data.token);
+  //       console.log("Token fetched:", data.token);
+  //     })
+  //     .catch((error) => console.error("Error fetching token:", error));
+  // };
   
-  const fetchOrders = async (token) => {
+  const fetchOrders = async () => {
+    const token = await AsyncStorage.getItem('token');
     setIsLoading(true);
     await getOrders(token);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchToken();
+    fetchOrders();
   }, []);
 
   return (

@@ -31,6 +31,7 @@ export const apiLogin = async (data) => {
             AsyncStorage.setItem('userToken', token);
             AsyncStorage.setItem('user_id', user_id);
             AsyncStorage.setItem('username', username);
+            AsyncStorage.setItem('role', role);
             return jsonResponse;
         })
         .catch(err => {

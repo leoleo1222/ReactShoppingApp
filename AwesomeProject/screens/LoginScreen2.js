@@ -92,8 +92,9 @@ export default function LoginScreen2({ navigation }) {
 
       // Store token in AsyncStorage
       await AsyncStorage.setItem("token", token);
-      await AsyncStorage.setItem("username", Username);
-      await AsyncStorage.setItem("password", password);
+      // await AsyncStorage.setItem("username", Username);
+      // await AsyncStorage.setItem("password", password);
+      await AsyncStorage.setItem("role", responseData.role);
 
       console.log("Token:", token);
 

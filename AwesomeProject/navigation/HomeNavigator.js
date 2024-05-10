@@ -24,7 +24,7 @@ function EmptyComponent() {
 const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
     console.log("Removed token from async storage");
-    navigation.navigate("Products");
+    navigation.navigate("Home");
 };
 
 function ProductNavigator() {
@@ -58,6 +58,7 @@ function LoginNavigator() {
 
 export default function BottomTabNavigator() {
     const [token, setToken] = useState(null);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         const getToken = async () => {
@@ -66,6 +67,12 @@ export default function BottomTabNavigator() {
             setToken(storedToken);
         };
         getToken();
+        const getRole = async () => {
+            const storedRole = await AsyncStorage.getItem('role');
+            console.log('Role:', storedRole);
+            setRole(storedToken);
+        };
+        getRole();
     }, []);
 
     return (
@@ -98,20 +105,27 @@ export default function BottomTabNavigator() {
                 })}
             >
                 <Tab.Screen name="ProductsTab" component={ProductNavigator} options={{ tabBarLabel: 'Products' , headerShown: false }} />
-                <Tab.Screen name="TransactionsTab" component={TransactionsScreen} options={{ tabBarLabel: 'Transactions' , headerShown: false }} />
-                <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ tabBarLabel: 'Profile' , headerShown: false }} />
-
+                {/* <Tab.Screen name="TransactionsTab" component={TransactionsScreen} options={{ tabBarLabel: 'Transactions' , headerShown: false }} /> */}
+                {token ? (
+                    <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ tabBarLabel: 'Profile' , headerShown: false }} />
+                ) : null}
+                
                 {/* Conditionally render the Login and Logout screens */}
                 {token === null ? (
                     <Tab.Screen name="Login" component={LoginScreen2} options={{ tabBarLabel: 'Login', headerShown: false }} />
                 ) : (
-                    <Tab.Screen name="Logout" component={EmptyComponent} listeners={({ navigation }) => ({
-                        tabPress: (e) => {
-                            e.preventDefault(); // Prevent default action
-                            handleLogout(); // Call handleLogout function
-                        },
-                    })} />
+                    // <Tab.Screen name="Logout" component={EmptyComponent} listeners={({ navigation }) => ({
+                    //     tabPress: (e) => {
+                    //         e.preventDefault(); // Prevent default action
+                    //         handleLogout(); // Call handleLogout function
+                    //     },
+                    // })} />
+                    null
                 )}
+
+                {role === "admin" ? (
+                    <Tab.Screen name="UserList" component={UserListScreen} options={{ tabBarLabel: 'UserList' , headerShown: false }} />
+                ) : null}
 
                 <Tab.Screen
                     name="ChatBot"
@@ -122,7 +136,7 @@ export default function BottomTabNavigator() {
                         headerShown: false
                     }}
                 />
-                <Tab.Screen name="UserList" component={UserListScreen} options={{ tabBarLabel: 'UserList' , headerShown: false }} />
+
             </Tab.Navigator>
             <FloatingButton />
         </View>

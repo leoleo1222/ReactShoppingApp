@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity, Image,
   Button, TextInput, ActivityIndicator
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import ProductItem from '../components/ProductItem';
 
 export default function ProductsScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,9 +70,15 @@ export default function ProductsScreen({ navigation }) {
               />
               <View style={styles.productInfo}>
                 <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.productPrice}>${item.price}</Text>
-                {parseFloat(item.discount) > 0 && (
-                  <Text style={styles.productPrice}>Discount: {item.discount}</Text>
+                
+                {parseFloat(item.discount) > 0 ? (
+                  <>
+                    <Text style={[styles.productPrice, { textDecorationLine: 'line-through' }]}>Old Price: ${parseFloat(item.price)}</Text>
+                    <Text style={styles.productPrice}>Price: ${parseFloat(item.price) - parseFloat(item.price) * parseFloat(item.discount)}</Text>
+                    <Text style={styles.productPrice}>Discount: {parseFloat(item.discount)*100}% off</Text>
+                  </>
+                ) : (
+                  <Text style={styles.productPrice}>Price: ${parseFloat(item.price)}</Text>
                 )}
                 {/* <Text style={styles.productPrice}>Discount: {item.discount}</Text> */}
                 {/* <Text style={styles.productPrice}>Quantity: {item.quantity}</Text> */}
@@ -80,6 +87,9 @@ export default function ProductsScreen({ navigation }) {
               </View>
             </TouchableOpacity>
           )}
+          // renderItem={({ item }) => (
+          //   <ProductItem item={item} />
+          // )}
           refreshing={isLoading}
           onRefresh={fetchProducts}
           contentContainerStyle={styles.productList}
