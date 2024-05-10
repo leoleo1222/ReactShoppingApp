@@ -133,7 +133,6 @@ export default function LoginScreen2({ navigation }) {
       // Close the registration modal after successful registration
       toggleRegistrationModal();
 
-      navigation.navigate("Products");
     } catch (error) {
       console.error("Error:", error);
     }
