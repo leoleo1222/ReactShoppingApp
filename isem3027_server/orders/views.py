@@ -48,7 +48,7 @@ data = {
 def make_payment(request):
     if request.method != "POST":
         return
-
+    
     if not request.user.is_authenticated:
         raise PermissionDenied()
 

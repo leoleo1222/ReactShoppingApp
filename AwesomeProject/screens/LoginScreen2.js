@@ -80,6 +80,9 @@ export default function LoginScreen2({ navigation }) {
   
       // Store token in AsyncStorage
       await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem('userToken', token);
+      await AsyncStorage.setItem('user_id', user_id);
+      await AsyncStorage.setItem('username', username);
   
       // Redirect or update state accordingly
       // For example, navigate to the next screen
