@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function FloatingButton() {
     const navigation = useNavigation();
@@ -33,7 +33,7 @@ export default function FloatingButton() {
                 style={styles.fab}
                 onPress={() => navigation.navigate('ChatBot')}  // Navigate to ChatBot screen
             >
-                <MaterialCommunityIcons name="cloud" size={24} color="#fff" />
+                <FontAwesome name="comments" size={24} color="#fff" />
             </TouchableOpacity>
         </View>
     );

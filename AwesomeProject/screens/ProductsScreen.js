@@ -3,14 +3,26 @@ import {
   StyleSheet, Text, View, FlatList, TouchableOpacity, Image,
   Button, TextInput, ActivityIndicator
 } from 'react-native';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
-import ProductItem from '../components/ProductItem';
 
 export default function ProductsScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
+
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+      const getToken = async () => {
+          const storedToken = await AsyncStorage.getItem('token');
+          console.log('Stored token:', storedToken);
+          setToken(storedToken);
+      };
+      getToken();
+  }, []);
 
   useEffect(() => {
     fetchProducts();
@@ -21,7 +33,20 @@ export default function ProductsScreen({ navigation }) {
   }, [searchQuery, products]);
 
   const pressHandler = (product) => {
-    navigation.navigate('Order', { product });
+    // Assuming 'isLoggedIn' is a boolean indicating the user's login status
+    if (token) {
+      navigation.navigate('Order', { product });
+    } else {
+      // Prompt the user to log in
+      Alert.alert(
+        "Login Required",
+        "You must be logged in to place an order.",
+        [
+          { text: "OK", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
+        ],
+        { cancelable: false }
+      );
+    }
   };
 
   const fetchProducts = async () => {

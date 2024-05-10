@@ -12,6 +12,7 @@ import TransactionsScreen from '../screens/TransactionsScreen';
 import LoginScreen2 from "../screens/LoginScreen2";
 import ChatBotScreen from "../screens/ChatBotScreen";
 import UserListScreen from '../screens/UserlistScreen';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -70,7 +71,7 @@ export default function BottomTabNavigator() {
         const getRole = async () => {
             const storedRole = await AsyncStorage.getItem('role');
             console.log('Role:', storedRole);
-            setRole(storedToken);
+            setRole(storedRole);
         };
         getRole();
     }, []);
@@ -82,27 +83,30 @@ export default function BottomTabNavigator() {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
                         if (route.name === 'ProductsTab') {
-                            iconName = 'cart';
+                            iconName = 'shopping-cart';
                         } else if (route.name === 'TransactionsTab') {
-                            iconName = 'credit-card-outline';
+                            iconName = 'credit-card';
                         } else if (route.name === 'ProfileTab') {
-                            iconName = 'account';
+                            iconName = 'user-circle';
                         } else if (route.name === 'ChatBot') {
-                            iconName = 'robot';
+                            iconName = 'android'; // FontAwesome does not have a direct 'robot' icon
                         } else if (route.name === 'UserList') {
-                            iconName = 'account-group';
+                            iconName = 'group';
                         }
 
                         // Conditionally show the login or logout icon based on token
                         else if (route.name === 'Login' && !token) {
-                            iconName = 'login';
+                            iconName = 'sign-in';
                         } else if (route.name === 'Logout' && token !== null) {
-                            iconName = 'logout';
+                            iconName = 'sign-out';
                         }
 
-                        return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+                        // Return the FontAwesome icon component with the determined iconName
+                        return <FontAwesome name={iconName} size={size} color={color} />;
                     },
+
                 })}
+                
             >
                 <Tab.Screen name="ProductsTab" component={ProductNavigator} options={{ tabBarLabel: 'Products' , headerShown: false }} />
                 {/* <Tab.Screen name="TransactionsTab" component={TransactionsScreen} options={{ tabBarLabel: 'Transactions' , headerShown: false }} /> */}
