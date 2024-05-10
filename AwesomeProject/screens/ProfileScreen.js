@@ -18,6 +18,7 @@ export default function ProfileScreen({ navigation }) {
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("role");
+    await AsyncStorage.removeItem("username");
     console.log("Removed token from async storage");
     navigation.navigate("Products");
     window.location.reload();
@@ -30,9 +31,10 @@ export default function ProfileScreen({ navigation }) {
   }, []);
   // Function to fetch user data from the API
   const fetchUserData = async () => {
+    const Username = await AsyncStorage.getItem('username');
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/account/hkbu"
+        `http://localhost:8000/api/admin/account/${Username}/`
       );
       const data = await response.json();
       setUserData(data);

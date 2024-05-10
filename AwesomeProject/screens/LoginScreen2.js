@@ -94,7 +94,7 @@ export default function LoginScreen2({ navigation }) {
 
       // Store token in AsyncStorage
       await AsyncStorage.setItem("token", token);
-      // await AsyncStorage.setItem("username", Username);
+      await AsyncStorage.setItem("username", Username);
       // await AsyncStorage.setItem("password", password);
       await AsyncStorage.setItem("role", responseData.role);
 
@@ -213,8 +213,10 @@ export default function LoginScreen2({ navigation }) {
         ) : (
           <Fragment></Fragment>
         )}
-        <TouchableOpacity onPress={() => setRole(role === 'user' ? 'admin' : 'user')}>
-            <Text style={styles.registerButtonText}>{role}</Text>
+        <TouchableOpacity onPress={() => {
+          setRole(role == 'user' ? 'admin' : 'user');
+        }}>
+          <Text style={styles.registerButtonText}>{role}</Text>
         </TouchableOpacity>
         {register ? (
           <View

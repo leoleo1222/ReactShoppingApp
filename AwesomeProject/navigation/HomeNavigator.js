@@ -111,6 +111,9 @@ export default function BottomTabNavigator() {
             >
                 <Tab.Screen name="ProductsTab" component={ProductNavigator} options={{ tabBarLabel: 'Products' , headerShown: false }} />
                 {/* <Tab.Screen name="TransactionsTab" component={TransactionsScreen} options={{ tabBarLabel: 'Transactions' , headerShown: false }} /> */}
+                {role === "admin" ? (
+                    <Tab.Screen name="UserList" component={UserListScreen} options={{ tabBarLabel: 'UserList' , headerShown: false }} />
+                ) : null}
                 {token ? (
                     <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ tabBarLabel: 'Profile' , headerShown: false }} />
                 ) : null}
@@ -128,9 +131,6 @@ export default function BottomTabNavigator() {
                     null
                 )}
 
-                {role === "admin" ? (
-                    <Tab.Screen name="UserList" component={UserListScreen} options={{ tabBarLabel: 'UserList' , headerShown: false }} />
-                ) : null}
 
                 <Tab.Screen
                     name="ChatBot"
@@ -146,7 +146,7 @@ export default function BottomTabNavigator() {
                     component={RegisterScreen}
                     options={{
                         tabBarLabel: 'Register',
-                        // tabBarButton: EmptyComponent,  // Hides the tab bar button
+                        tabBarButton: EmptyComponent,  // Hides the tab bar button
                         headerShown: false
                     }}
                 />
