@@ -80,10 +80,14 @@ export default function LoginScreen2({ navigation }) {
   
       // Store token in AsyncStorage
       await AsyncStorage.setItem("token", token);
+
+      console.log("Token:", token);
   
       // Redirect or update state accordingly
       // For example, navigate to the next screen
       navigation.navigate("Products");
+      // refesh the page
+      window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }

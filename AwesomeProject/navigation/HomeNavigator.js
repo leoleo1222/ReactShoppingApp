@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import FloatingButton from '../components/FloatingButton';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProductsScreen from '../screens/ProductsScreen';
 import OrderScreen from '../screens/OrderScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -19,6 +19,13 @@ const Stack = createStackNavigator();
 function EmptyComponent() {
     return null;  // Returns nothing, effectively hiding the tab button
 }
+      
+// Function to handle logout to clear the token in await AsyncStorage.setItem("token", token);
+const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    console.log("Removed token from async storage");
+    navigation.navigate("Products");
+};
 
 function ProductNavigator() {
     return (
@@ -50,6 +57,17 @@ function LoginNavigator() {
 
 
 export default function BottomTabNavigator() {
+    const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        const getToken = async () => {
+            const storedToken = await AsyncStorage.getItem('token');
+            console.log('Stored token:', storedToken);
+            setToken(storedToken);
+        };
+        getToken();
+    }, []);
+
     return (
         <View style={{ flex: 1 }}>
             <Tab.Navigator
@@ -62,14 +80,19 @@ export default function BottomTabNavigator() {
                             iconName = 'credit-card-outline';
                         } else if (route.name === 'ProfileTab') {
                             iconName = 'account';
-                        } else if (route.name === 'Login') {
-                            iconName = 'login';
                         } else if (route.name === 'ChatBot') {
                             iconName = 'robot';
-                        }
-                        else if (route.name === 'UserList') {
+                        } else if (route.name === 'UserList') {
                             iconName = 'account-group';
                         }
+
+                        // Conditionally show the login or logout icon based on token
+                        else if (route.name === 'Login' && !token) {
+                            iconName = 'login';
+                        } else if (route.name === 'Logout' && token !== null) {
+                            iconName = 'logout';
+                        }
+
                         return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
                     },
                 })}
@@ -77,7 +100,19 @@ export default function BottomTabNavigator() {
                 <Tab.Screen name="ProductsTab" component={ProductNavigator} options={{ tabBarLabel: 'Products' , headerShown: false }} />
                 <Tab.Screen name="TransactionsTab" component={TransactionsScreen} options={{ tabBarLabel: 'Transactions' , headerShown: false }} />
                 <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ tabBarLabel: 'Profile' , headerShown: false }} />
-                <Tab.Screen name="Login" component={LoginScreen2} options={{ tabBarLabel: 'Login', headerShown: false }} />
+
+                {/* Conditionally render the Login and Logout screens */}
+                {token === null ? (
+                    <Tab.Screen name="Login" component={LoginScreen2} options={{ tabBarLabel: 'Login', headerShown: false }} />
+                ) : (
+                    <Tab.Screen name="Logout" component={EmptyComponent} listeners={({ navigation }) => ({
+                        tabPress: (e) => {
+                            e.preventDefault(); // Prevent default action
+                            handleLogout(); // Call handleLogout function
+                        },
+                    })} />
+                )}
+
                 <Tab.Screen
                     name="ChatBot"
                     component={ChatBotScreen}
