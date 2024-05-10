@@ -44,26 +44,28 @@ export default function TransactionsScreen({ navigation }) {
       return { error: "Cannot fetch any orders" };
     }
   };
-
-  const fetchToken = () => {
+  const fetchToken = async () => {
+    const username = await AsyncStorage.getItem("username");
+    const password = await AsyncStorage.getItem("password");
+    // Fetch token from Django API
     fetch("http://127.0.0.1:8000/api/api-token-auth/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: "a",
-        password: "a",
+        username: username,
+        password: password,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        setUserToken(data.token);
-        fetchOrders(data.token);
+        setToken(data.token);
+        console.log("Token fetched:", data.token);
       })
       .catch((error) => console.error("Error fetching token:", error));
   };
-
+  
   const fetchOrders = async (token) => {
     setIsLoading(true);
     await getOrders(token);

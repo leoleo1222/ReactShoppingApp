@@ -13,6 +13,8 @@ import {
   ScrollView,
 } from "react-native";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const ChatBotScreen = () => {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
@@ -140,7 +142,9 @@ const ChatBotScreen = () => {
   };
   
 
-  const fetchToken = () => {
+  const fetchToken = async () => {
+    const username = await AsyncStorage.getItem("username");
+    const password = await AsyncStorage.getItem("password");
     // Fetch token from Django API
     fetch("http://127.0.0.1:8000/api/api-token-auth/", {
       method: "POST",
@@ -148,8 +152,8 @@ const ChatBotScreen = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: "a",
-        password: "a",
+        username: username,
+        password: password,
       }),
     })
       .then((response) => response.json())
