@@ -14,6 +14,7 @@ import ChatBotScreen from "../screens/ChatBotScreen";
 import UserListScreen from '../screens/UserlistScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import { FontAwesome } from '@expo/vector-icons';
+import OrderAdminScreen from '../screens/OrderAdminScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -102,6 +103,10 @@ export default function BottomTabNavigator() {
                             iconName = 'sign-out';
                         }
 
+                        else if (route.name === 'OrderList' && token !== null) {
+                            iconName = 'th-list';
+                        }
+
                         // Return the FontAwesome icon component with the determined iconName
                         return <FontAwesome name={iconName} size={size} color={color} />;
                     },
@@ -112,7 +117,10 @@ export default function BottomTabNavigator() {
                 <Tab.Screen name="ProductsTab" component={ProductNavigator} options={{ tabBarLabel: 'Products' , headerShown: false }} />
                 {/* <Tab.Screen name="TransactionsTab" component={TransactionsScreen} options={{ tabBarLabel: 'Transactions' , headerShown: false }} /> */}
                 {role === "admin" ? (
-                    <Tab.Screen name="UserList" component={UserListScreen} options={{ tabBarLabel: 'UserList' , headerShown: false }} />
+                    <Tab.Screen name="UserList" component={UserListScreen} options={{ tabBarLabel: 'User List' , headerShown: false }} />
+                ) : null}
+                {role === "admin" ? (
+                    <Tab.Screen name="OrderList" component={OrderAdminScreen} options={{ tabBarLabel: 'Order List' , headerShown: false }} />
                 ) : null}
                 {token ? (
                     <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ tabBarLabel: 'Profile' , headerShown: false }} />

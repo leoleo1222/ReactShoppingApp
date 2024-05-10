@@ -114,13 +114,13 @@ class OrderAdminView(APIView):
         if pk:
             try:
                 order = Order.objects.get(pk=pk)
-                serializer = OrderSerializer(order)
+                serializer = OrderListSerializer(order)
                 return Response(serializer.data)
             except Order.DoesNotExist:
                 return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
         else:
             orders = Order.objects.all()
-            serializer = OrderSerializer(orders, many=True)
+            serializer = OrderListSerializer(orders, many=True)
             return Response(serializer.data)
 
     def post(self, request):
@@ -142,7 +142,7 @@ class OrderAdminView(APIView):
         except Order.DoesNotExist:
             return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = OrderSerializer(order, data=request.data, partial=True)
+        serializer = OrderListSerializer(order, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -158,3 +158,16 @@ class OrderAdminView(APIView):
             return Response({'message': 'Order deleted'}, status=status.HTTP_204_NO_CONTENT)
         except Order.DoesNotExist:
             return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+    def get_queryset(self):
+        """
+        This method returns the queryset of orders to be used in the list view when no pk is specified.
+        Override this method to customize the retrieval of orders.
+        """
+        return Order.objects.all()
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        Instantiate and return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        """
+        return OrderSerializer(*args, **kwargs)        
