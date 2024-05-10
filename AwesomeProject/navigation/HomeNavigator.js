@@ -67,6 +67,9 @@ export default function BottomTabNavigator() {
                         } else if (route.name === 'ChatBot') {
                             iconName = 'robot';
                         }
+                        else if (route.name === 'UserList') {
+                            iconName = 'account-group';
+                        }
                         return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
                     },
                 })}
