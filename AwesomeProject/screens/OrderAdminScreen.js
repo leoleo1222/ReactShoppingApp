@@ -77,6 +77,8 @@ export default function OrderAdminScreen({ navigation }) {
             <View style={styles.itemContainer}>
               <Text style={styles.itemText}>Invoice:</Text>
               <Text style={styles.detailText}> {item.invoice_no}</Text>
+              <Text style={styles.itemText}>Customer:</Text>
+              <Text style={styles.detailText}> {item.customer.username}</Text>
               <Text style={styles.itemText}>Product:</Text>
               <Text style={styles.detailText}> {item.product.name}</Text>
               <Text style={styles.itemText}>Quantity:</Text>

@@ -113,7 +113,7 @@ class OrderAdminView(APIView):
         """
         if pk:
             try:
-                order = Order.objects.get(pk=pk)
+                order = Order.objects.get(invoice_no=pk)
                 serializer = OrderListSerializer(order)
                 return Response(serializer.data)
             except Order.DoesNotExist:
@@ -138,7 +138,7 @@ class OrderAdminView(APIView):
         Partially update an order.
         """
         try:
-            order = Order.objects.get(pk=pk)
+            order = Order.objects.get(invoice_no=pk)
         except Order.DoesNotExist:
             return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -153,7 +153,7 @@ class OrderAdminView(APIView):
         Delete an order.
         """
         try:
-            order = Order.objects.get(pk=pk)
+            order = Order.objects.get(invoice_no=pk)
             order.delete()
             return Response({'message': 'Order deleted'}, status=status.HTTP_204_NO_CONTENT)
         except Order.DoesNotExist:
@@ -171,3 +171,35 @@ class OrderAdminView(APIView):
         deserializing input, and for serializing output.
         """
         return OrderSerializer(*args, **kwargs)        
+    
+class OrderAdminUserView(APIView):
+    
+    def get(self, request, username=None):
+        """
+        Get orders by user's username or list all orders if no username is specified.
+        """
+        if username:
+            orders = Order.objects.filter(customer__username=username)
+            if not orders.exists():
+                raise NotFound(detail="No orders found for the user.", code=status.HTTP_404_NOT_FOUND)
+
+            serializer = OrderListSerializer(orders, many=True)
+            return Response(serializer.data)
+        else:
+            orders = self.get_queryset()
+            serializer = OrderListSerializer(orders, many=True)
+            return Response(serializer.data)
+
+    def get_queryset(self):
+        """
+        Returns the queryset of orders to be used in the list view when no username is specified.
+        Override this method to customize the retrieval of orders.
+        """
+        return Order.objects.all()
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        Instantiate and return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        """
+        return OrderListSerializer(*args, **kwargs)

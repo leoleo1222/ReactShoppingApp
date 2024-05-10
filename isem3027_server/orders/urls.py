@@ -6,7 +6,8 @@ from .views import (
     make_payment,
     confirm_payment,
     cancel_payment,
-    OrderAdminView
+    OrderAdminView,
+    OrderAdminUserView,
 )
 
 urlpatterns = [
@@ -16,5 +17,6 @@ urlpatterns = [
     path('cancel/', cancel_payment),
     path('admin/orders/', OrderAdminView.as_view()),
     path('admin/orders/<int:pk>', OrderAdminView.as_view()),
+    path('admin/orders/user/<str:username>', OrderAdminUserView.as_view()),
 ]
 
