@@ -12,7 +12,7 @@ import {
   Modal,
 } from "react-native";
 import { apiLogin } from "../services/api";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // LoginScreen2.propTypes = {
 //   register: PropTypes.bool,
@@ -25,16 +25,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Placeholder functions for handling login and register navigation
 const handleSignUp = () => {};
 
-
 const handleForgotPassword = () => {
   console.log("Forgot Password");
 };
 
 const handleRegisterNavigation = () => {
   // console.log("navigate to register");
-  navigation.navigate('Register');
+  navigation.navigate("Register");
 };
-
 
 const googleLogo = require("../assets/images/google-logo.png");
 const facebookLogo = require("../assets/images/facebook-logo.png");
@@ -47,23 +45,37 @@ export default function LoginScreen2({ navigation }) {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [maintenancePopup, setMaintenancePopup] = useState(false); // State variable for showing maintenance popup
+  const [regUsername, regsetUsername] = useState("");
+  const [regpassword, regsetPassword] = useState("");
 
   const handleOAuthLogin = (service) => {
     console.log(`Login with ${service}`);
     setMaintenancePopup("This feature is under maintenance");
   };
 
+  const [registrationModalVisible, setRegistrationModalVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  
+
+  // Function to handle opening and closing of the registration modal
+  const toggleRegistrationModal = () => {
+    setRegistrationModalVisible(!registrationModalVisible);
+  };
+
   const handleLogin = useCallback(async () => {
     try {
       const data = { username: Username, password }; // Modify the data object to match API requirements
-      const response = await fetch("http://127.0.0.1:8000/api/api-token-auth/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-  
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/api-token-auth/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
       if (!response.ok) {
         // Handle error if response is not OK
         if (response.status === 400) {
@@ -74,15 +86,15 @@ export default function LoginScreen2({ navigation }) {
         }
         return;
       }
-  
+
       const responseData = await response.json();
       const { token } = responseData;
-  
+
       // Store token in AsyncStorage
       await AsyncStorage.setItem("token", token);
 
       console.log("Token:", token);
-  
+
       // Redirect or update state accordingly
       // For example, navigate to the next screen
       navigation.navigate("Products");
@@ -92,6 +104,40 @@ export default function LoginScreen2({ navigation }) {
       console.error("Error:", error);
     }
   }, [Username, password, navigation]);
+
+  const handleRegistration = useCallback(async () => {
+    try {
+      const data = {
+        username: regUsername,
+        password: regpassword,
+        password2: password2,
+        email: email,
+      };
+  
+      const response = await fetch("http://localhost:8000/api/admin/account/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        console.error("Registration failed");
+        return;
+      }
+  
+      const responseData = await response.json();
+      console.log("Registration response:", responseData);      
+  
+      // Close the registration modal after successful registration
+      toggleRegistrationModal();
+
+      navigation.navigate("Products");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }, [Username, password, password2, email]);
   
 
   return (
@@ -99,17 +145,19 @@ export default function LoginScreen2({ navigation }) {
       <StatusBar barStyle="light-content" backgroundColor="#FFFFFF" />
 
       <View style={styles.container}>
-      {!register ?
-      ( <Fragment>
-          <Text style={styles.title}>Let's Sign You In</Text>
-          <Text style={styles.subtitle}>Welcome back, you've been missed!</Text>
-        </Fragment>):
-      (
-        <Fragment>
-          <Text style={styles.title}>Welcome</Text>
-          <Text style={styles.subtitle}>Nice to meet You!</Text>
-        </Fragment>)
-      }
+        {!register ? (
+          <Fragment>
+            <Text style={styles.title}>Let's Sign You In</Text>
+            <Text style={styles.subtitle}>
+              Welcome back, you've been missed!
+            </Text>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Text style={styles.title}>Welcome</Text>
+            <Text style={styles.subtitle}>Nice to meet You!</Text>
+          </Fragment>
+        )}
         <View style={styles.inputContainer}>
           <Text style={styles.inputHint}>Username</Text>
 
@@ -153,15 +201,13 @@ export default function LoginScreen2({ navigation }) {
             </View>
           </View>
         )}
-        {!register ? 
-        (            
+        {!register ? (
           <TouchableOpacity style={styles.signInButton} onPress={handleLogin}>
-          <Text style={styles.buttonText}>SIGN IN</Text>
-          {/* Add arrow icon */}
-        </TouchableOpacity>)
-         : (
-          <Fragment>
-          </Fragment>
+            <Text style={styles.buttonText}>SIGN IN</Text>
+            {/* Add arrow icon */}
+          </TouchableOpacity>
+        ) : (
+          <Fragment></Fragment>
         )}
 
         {register ? (
@@ -215,10 +261,62 @@ export default function LoginScreen2({ navigation }) {
 
         <View style={styles.registerTextContainer}>
           <Text style={styles.registerText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={handleRegisterNavigation}>
+          <TouchableOpacity onPress={toggleRegistrationModal}>
             <Text style={styles.registerButtonText}>Sign up here</Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={registrationModalVisible}
+          onRequestClose={toggleRegistrationModal}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              {/* Registration form fields */}
+              <Text style={styles.modalText}>Registration Form</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Username"
+                onChangeText={(text) => regsetUsername(text)}
+                value={regUsername}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                onChangeText={(text) => regsetPassword(text)}
+                value={regpassword}
+                secureTextEntry={true}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Re-enter Password"
+                onChangeText={(text) => setPassword2(text)}
+                value={password2}
+                secureTextEntry={true}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+              />
+              {/* Buttons for registration and closing the modal */}
+              <TouchableOpacity
+                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                onPress={handleRegistration} // Implement this function
+              >
+                <Text style={styles.textStyle}>Register</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                onPress={toggleRegistrationModal}
+              >
+                <Text style={styles.textStyle}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         <Modal
           animationType="slide"
           transparent={true}
@@ -229,7 +327,7 @@ export default function LoginScreen2({ navigation }) {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-            <Text style={styles.modalText}>{maintenancePopup}</Text>
+              <Text style={styles.modalText}>{maintenancePopup}</Text>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                 onPress={() => {
