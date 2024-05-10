@@ -34,6 +34,10 @@ export default function TransactionsScreen({ navigation }) {
 
       const jsonResponse = await response.json();
       setOrdersList(jsonResponse);
+      console.log("Orders fetched successfully:", jsonResponse.status);
+      jsonResponse.forEach((transaction) => {
+        console.log("Transaction status:", transaction.status);
+      });
       return jsonResponse;
     } catch (error) {
       console.error("Error fetching orders:", error);
@@ -80,16 +84,18 @@ export default function TransactionsScreen({ navigation }) {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
-              <Text style={styles.itemText}>Invoice:</Text><Text style={styles.detailText}> {item.invoice_no}</Text>
-              <Text style={styles.itemText}>Product:</Text><Text style={styles.detailText}> {item.product.name}</Text>
-              <Text style={styles.itemText}>Quantity:</Text><Text style={styles.detailText}> {item.quantity}</Text>
-              <Text style={styles.itemText}>Price:</Text><Text style={styles.detailText}> {item.total_amount}</Text>
-              <Text style={styles.itemText}>Delivery Date: </Text><Text style={styles.detailText}>
-                {item.delivery_date}
-              </Text>
-              <Text style={styles.itemText}>Status: </Text><Text style={styles.detailText}>
-                {item.stutus}
-              </Text>
+              <Text style={styles.itemText}>Invoice:</Text>
+              <Text style={styles.detailText}> {item.invoice_no}</Text>
+              <Text style={styles.itemText}>Product:</Text>
+              <Text style={styles.detailText}> {item.product.name}</Text>
+              <Text style={styles.itemText}>Quantity:</Text>
+              <Text style={styles.detailText}> {item.quantity}</Text>
+              <Text style={styles.itemText}>Price:</Text>
+              <Text style={styles.detailText}> {item.total_amount}</Text>
+              <Text style={styles.itemText}>Delivery Date: </Text>
+              <Text style={styles.detailText}>{item.delivery_date}</Text>
+              <Text style={styles.itemText}>Status: </Text>
+              <Text style={styles.detailText}>{item.status}</Text>
             </View>
           )}
         />
