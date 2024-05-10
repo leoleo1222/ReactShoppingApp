@@ -80,13 +80,14 @@ export default function LoginScreen2({ navigation }) {
   
       // Store token in AsyncStorage
       await AsyncStorage.setItem("token", token);
-      await AsyncStorage.setItem('userToken', token);
-      await AsyncStorage.setItem('user_id', user_id);
-      await AsyncStorage.setItem('username', username);
+
+      console.log("Token:", token);
   
       // Redirect or update state accordingly
       // For example, navigate to the next screen
       navigation.navigate("Products");
+      // refesh the page
+      window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }
