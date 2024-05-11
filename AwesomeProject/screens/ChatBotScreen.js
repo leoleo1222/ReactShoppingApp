@@ -46,17 +46,11 @@ const ChatBotScreen = () => {
   const responses = {
     responses: {
       "What item do you want information about?":
-        "We have a wide range of products available. Please let us know the category you are interested in.",
-      "Tell me my order details?":
-        "Please provide your order number so we can assist you better.",
-      "What promotions are available?":
-        "We have various promotions available. Please let us know the type of promotion you are interested in.",
+        "We have a wide range of products available. Please let us know the category you are interested in."
     },
   };
 
   useEffect(() => {
-    console.log("Fetching token...");
-    fetchToken();
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       (e) => {
@@ -95,8 +89,7 @@ const ChatBotScreen = () => {
     // If the user typed the message directly, send it to the API
     if (!questions.questions.some((question) => question.text === option)) {
       console.log("Sending message to API:", option);
-      let endpoint = BASE_API_URL + "chatbot/";
-      fetch(endpoint, {
+      fetch("http://127.0.0.1:8000/api/chatbot/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -138,36 +131,79 @@ const ChatBotScreen = () => {
         console.log("Fetching products...");
         // Fetch product data from Django only if token is available
         fetchProducts();
+      } else if (option === "Tell me my order details?") {
+        console.log("Fetching order...");
+        // Fetch order data from Django only if token is available
+        fetchOrder();
+
       }
     }
   };
   
-
-  const fetchToken = async () => {
-    const username = await AsyncStorage.getItem("username");
-    const password = await AsyncStorage.getItem("password");
-    // Fetch token from Django API
-    fetch("http://192.168.1.225:8000/api/api-token-auth/", {
-      method: "POST",
+  const fetchOrder = async () => {
+    const token = await AsyncStorage.getItem('token');
+    
+    if (!token) {
+      console.error("No token available.");
+      setChatHistory((prevHistory) => [
+        ...prevHistory,
+        {
+          text: "Sorry, you need to log in to view your orders.",
+          sender: "bot",
+        },
+      ]);
+      return;
+    }
+  
+    // Fetch orders data from Django API endpoint with token in headers
+    fetch("http://127.0.0.1:8000/api/orders/", {
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
       },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
     })
       .then((response) => response.json())
       .then((data) => {
-        setToken(data.token);
-        console.log("Token fetched:", data.token);
+        // Extract order details from the fetched data
+        console.log("Orders fetched successfully:", data);
+  
+        // Assuming data is an array of orders
+        data.forEach((order) => {
+          const {
+            invoice_no,
+            product: { name: productName },
+            quantity,
+            total_amount: price,
+            delivery_date,
+            status,
+          } = order;
+  
+          const orderDetails = `Invoice: ${invoice_no}\nProduct: ${productName}\nQuantity: ${quantity}\nPrice: ${price}\nDelivery Date: ${delivery_date}\nStatus: ${status}`;
+  
+          // Update chat history with the order details
+          setChatHistory((prevHistory) => [
+            ...prevHistory,
+            { text: orderDetails, sender: "bot" },
+          ]);
+        });
       })
-      .catch((error) => console.error("Error fetching token:", error));
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+        // Update chat history with error message if fetching fails
+        setChatHistory((prevHistory) => [
+          ...prevHistory,
+          {
+            text: "Sorry, there was an error fetching orders.",
+            sender: "bot",
+          },
+        ]);
+      });
   };
+  
+  
 
   const fetchProducts = () => {
     // Fetch product data from Django API endpoint with token in headers
-    fetch("http://192.168.1.225:8000/api/product/", {
+    fetch("http://127.0.0.1:8000/api/product/", {
       // headers: {
       //   Authorization: `Token ${token}`,
       // },
