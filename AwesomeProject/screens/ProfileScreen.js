@@ -21,7 +21,7 @@ export default function ProfileScreen({ navigation }) {
     await AsyncStorage.removeItem("username");
     console.log("Removed token from async storage");
     navigation.navigate("Products");
-    window.location.reload();
+    history.go(0);
   };
   
 

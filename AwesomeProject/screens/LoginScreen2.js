@@ -100,12 +100,14 @@ export default function LoginScreen2({ navigation }) {
       await AsyncStorage.setItem("role", responseData.role);
 
       console.log("Token:", token);
+      console.log("Username:", Username);
+      console.log("Role:", responseData.role);
 
       // Redirect or update state accordingly
       // For example, navigate to the next screen
       navigation.navigate("Products");
       // refesh the page
-      // window.location.reload();
+      history.go(0);
     } catch (error) {
       console.error("Error:", error);
     }
