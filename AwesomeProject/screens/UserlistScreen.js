@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-
+import { BASE_API_URL } from "../services/api";
 export default function UserListScreen() {
   const [orderHistoryVisible, setOrderHistoryVisible] = useState(false);
   const [userData, setUserData] = useState([]); // Assume userData is an array
@@ -17,7 +17,8 @@ export default function UserListScreen() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/admin/account/");
+      let endpoint = BASE_API_URL + "admin/account/";
+      const response = await fetch(endpoint);
       const data = await response.json();
       setUserData(data); // Assuming the JSON has a `users` array
     } catch (error) {

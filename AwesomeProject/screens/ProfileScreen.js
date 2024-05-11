@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { BASE_API_URL } from "../services/api";
 import TransactionsScreen from "./TransactionsScreen"; // Import the TransactionsScreen component
 
 export default function ProfileScreen({ navigation }) {
@@ -32,9 +32,10 @@ export default function ProfileScreen({ navigation }) {
   // Function to fetch user data from the API
   const fetchUserData = async () => {
     const Username = await AsyncStorage.getItem('username');
+    let endpoint = BASE_API_URL + 'admin/account/' + Username + '/';
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/account/${Username}/`
+        endpoint
       );
       const data = await response.json();
       setUserData(data);

@@ -53,7 +53,7 @@ export default function ProductsScreen({ navigation }) {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      let endpoint = BASE_API_URL + '/product/';
+      let endpoint = BASE_API_URL + 'product/';
       const response = await fetch(endpoint);
       const data = await response.json();
       setProducts(data);
