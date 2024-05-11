@@ -119,7 +119,8 @@ export const getProduct = async (id) => {
 }
 
 export const makePayment = async (orderData) => {
-    const userToken = await AsyncStorage.getItem('userToken');
+    const userToken = await AsyncStorage.getItem('token');
+    console.log("userToken: ", userToken);
     const endpoint = BASE_API_URL + `payment/`;
     const method = "POST";
     const headers = {
@@ -167,7 +168,7 @@ export const cancelPayment = async (payment_token) => {
 
 // New for transaction screen
 export const getOrders = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
+    const userToken = await AsyncStorage.getItem('token');
 
     const endpoint = BASE_API_URL + "orders/";
     const method = "GET";

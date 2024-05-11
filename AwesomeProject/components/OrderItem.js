@@ -37,7 +37,7 @@ export default function OrderItem({ product, quantity, totalAmount, deliveryDate
             </View>
 
             <View style={styles.quantityContainer}>
-                <TouchableOpacity onPress={() => inputHandler(quantity > 1 ? quantity - 1 : 1)} style={[styles.button, {backgroundColor: '#06629d'}]}>
+                <TouchableOpacity onPress={() => inputHandler(quantity > 1 ? quantity - 1 : 1)} style={[styles.button, styles.decrementButton]}>
                     <Text style={styles.buttonText}>-</Text>
                 </TouchableOpacity>
                 <TextInput 
@@ -47,15 +47,16 @@ export default function OrderItem({ product, quantity, totalAmount, deliveryDate
                     keyboardType='numeric' 
                     textAlign='center'
                 />
-                <TouchableOpacity onPress={() => inputHandler(Math.min(quantity + 1, product.quantity))} style={[styles.button, {backgroundColor: '#12354c'}]}>
+                <TouchableOpacity onPress={() => inputHandler(Math.min(quantity + 1, product.quantity))} style={[styles.button, styles.incrementButton]}>
                     <Text style={styles.buttonText}>+</Text>
                 </TouchableOpacity>
             </View>
 
             <Text style={styles.text}>Delivery Date: {deliveryDate.toLocaleDateString()}</Text>
+            <Text style={styles.text}>Delivery Time: {deliveryDate.toLocaleTimeString()}</Text>
             <View style={styles.buttonContainer}>
-                <Button icon={<Icon name="calendar" size={15} color="white" />} onPress={showDatepicker} title="Date" />
-                <Button icon={<Icon name="clock-o" size={15} color="white" />} onPress={showTimepicker} title="Time" />
+                <Button icon={<Icon name="calendar" size={15} color="white" />} onPress={showDatepicker} title="Select Date" />
+                <Button icon={<Icon name="clock-o" size={15} color="white" />} onPress={showTimepicker} title="Select Time" />
             </View>
 
             {show && (
@@ -70,73 +71,86 @@ export default function OrderItem({ product, quantity, totalAmount, deliveryDate
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
+        padding: 20,
         backgroundColor: '#f7f7f7',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
     },
     logo: {
-        height: 80,
-        width: 80,
-        marginBottom: 10,
+        height: 100,
+        width: 100,
         resizeMode: 'contain',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginVertical: 5,
+        color: '#333',
     },
     infoBox: {
         alignSelf: 'stretch',
-        paddingHorizontal: 15,
+        paddingHorizontal: 20,
+        marginTop: 10,
     },
     text: {
         fontSize: 16,
-        marginBottom: 5,
+        color: '#555',
     },
     descriptionText: {
-        fontSize: 14,
-        marginBottom: 5,
-        color: '#666666',
+        fontSize: 16,
+        color: '#666',
+        marginBottom: 10,
     },
     originalPrice: {
         textDecorationLine: 'line-through',
         textDecorationStyle: 'solid',
+        color: '#999',
         marginRight: 5,
     },
     priceLine: {
-        fontSize: 16,
-        marginBottom: 5,
+        fontSize: 18,
+        marginBottom: 10,
+        fontWeight: '500',
     },
     amountText: {
-        fontSize: 16,
-        alignSelf: 'flex-end',
-        marginTop: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#444',
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
-        marginTop: 10,
+        marginTop: 20,
     },
     quantityContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
+        marginVertical: 20,
     },
     textInput: {
         borderWidth: 1,
-        borderColor: '#cccccc',
+        borderColor: '#ccc',
         padding: 10,
-        width: 60,  // Set a fixed width for the input
+        width: 80,
+        fontSize: 16,
+        color: '#333',
         textAlign: 'center',
     },
     button: {
-        padding: 15,
+        padding: 13,
         paddingHorizontal: 20,
-        backgroundColor: '#dddddd',
+        borderRadius: 5,
+    },
+    decrementButton: {
+        // backgroundColor: '#cc6868',
+        backgroundColor: '#06629d',
+    },
+    incrementButton: {
+        // backgroundColor: '#68cc7d',
+        backgroundColor: '#12354c',
     },
     buttonText:{
+        fontSize: 18,
         color: 'white',
     }
 });

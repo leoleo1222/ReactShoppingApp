@@ -45,12 +45,14 @@ export default function OrderScreen({ route, navigation }) {
     console.log("Sending order data to server for making payment");
     // new for datetime
     // format: yyyy-mm-dd
-    var formamtedDate =
-      deliveryDate.getFullYear() +
-      "-" +
-      (deliveryDate.getMonth() + 1) +
-      "-" +
-      deliveryDate.getDate();
+    // var formamtedDate =
+    //   deliveryDate.getFullYear() +
+    //   "-" +
+    //   (deliveryDate.getMonth() + 1) +
+    //   "-" +
+    //   deliveryDate.getDate();
+    const formamtedDate = `${deliveryDate.getFullYear()}-${(deliveryDate.getMonth() + 1).toString().padStart(2, '0')}-${deliveryDate.getDate().toString().padStart(2, '0')}T${deliveryDate.getHours().toString().padStart(2, '0')}:${deliveryDate.getMinutes().toString().padStart(2, '0')}`;
+
 
     const orderData = {
       product: product.id,
