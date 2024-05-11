@@ -551,12 +551,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
   },
   modalView: {
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
-    width: "80%", // Adjust the width to match Facebook design
-    maxWidth: 300, // Maximum width for small screens
+    width: "80%",
+    maxWidth: 400,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -569,5 +569,33 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000000",
+  },
+  input: {
+    width: "100%",
+    height: 40,
+    borderColor: "#DADDE1",
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    fontSize: 16,
+    color: "#000000",
+  },
+  openButton: {
+    width: "100%",
+    height: 40,
+    backgroundColor: "#4267B2",
+    borderRadius: 6,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  textStyle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
 });
