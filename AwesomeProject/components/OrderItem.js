@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { KeyboardAvoidingView} from 'react-native';
 
-export default function OrderItem({ product, quantity, totalAmount, deliveryDate, onDateChange, inputHandler }) {
+export default function OrderItem({ product, quantity, totalAmount, deliveryDate, onDateChange, inputHandler, onAddressChange}) {
     const defaultImage = 'https://reactnative.dev/img/tiny_logo.png';
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -25,6 +26,12 @@ export default function OrderItem({ product, quantity, totalAmount, deliveryDate
     };
 
     return (
+        
+        <KeyboardAvoidingView 
+            style={{ flex: 1 }} 
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+        >
         <View style={styles.container}>
             <Image style={styles.logo} source={{ uri: product.picture || defaultImage }} />
             <Text style={styles.title}>{product.name}</Text>
@@ -64,7 +71,13 @@ export default function OrderItem({ product, quantity, totalAmount, deliveryDate
             )}
 
             <Text style={styles.amountText}>Total: ${totalAmount}</Text>
+            <TextInput
+                style={styles.AddressInput}
+                placeholder="Enter your address"
+                onChangeText={onAddressChange}
+            />
         </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -152,5 +165,14 @@ const styles = StyleSheet.create({
     buttonText:{
         fontSize: 18,
         color: 'white',
-    }
+    },
+    AddressInput: {
+        width: '100%',
+        padding: 10,
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: '#ccc',
+        marginTop: 20,
+    },
+
 });

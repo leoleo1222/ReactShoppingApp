@@ -18,7 +18,7 @@ export default function TransactionsScreen({ navigation }) {
   const [userToken, setUserToken] = useState(null); // State to store user token
 
   const getOrders = async (token) => {
-    let endpoint = BASE_API_URL + "admin/orders/";
+    let endpoint = BASE_API_URL + "orders/";
     const method = "GET";
     const headers = {
       "Content-Type": "application/json",
@@ -92,17 +92,23 @@ export default function TransactionsScreen({ navigation }) {
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
               <Text style={styles.itemText}>Invoice:</Text>
-              <Text style={styles.detailText}> {item.invoice_no}</Text>
+              <Text style={styles.detailText}>{item.invoice_no}</Text>
               <Text style={styles.itemText}>Product:</Text>
-              <Text style={styles.detailText}> {item.product.name}</Text>
+              <Text style={styles.detailText}>{item.product.name}</Text>
               <Text style={styles.itemText}>Quantity:</Text>
-              <Text style={styles.detailText}> {item.quantity}</Text>
+              <Text style={styles.detailText}>{item.quantity}</Text>
               <Text style={styles.itemText}>Price:</Text>
-              <Text style={styles.detailText}> {item.total_amount}</Text>
+              <Text style={styles.detailText}>${item.total_amount}</Text>
               <Text style={styles.itemText}>Delivery Date: </Text>
-              <Text style={styles.detailText}>{item.delivery_date}</Text>
+              <Text style={styles.detailText}>{new Date(item.delivery_date).toLocaleDateString()}</Text>
+              <Text style={styles.itemText}>Delivery Time: </Text>
+              <Text style={styles.detailText}>{new Date(item.delivery_date).toLocaleTimeString()}</Text>
+              <Text style={styles.itemText}>Address:</Text>
+              <Text style={styles.detailText}>{item.address}</Text>
               <Text style={styles.itemText}>Status: </Text>
               <Text style={styles.detailText}>{item.status}</Text>
+              <Text style={styles.itemText}>Create At:</Text>
+              <Text style={styles.detailText}>{new Date(item.created).toLocaleDateString()} {new Date(item.created).toLocaleTimeString()}</Text>
             </View>
           )}
         />

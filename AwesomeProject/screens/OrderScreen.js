@@ -17,7 +17,7 @@ import PaypalView from "../components/PaypalView";
 import { getProduct, makePayment } from "../services/api";
 export default function OrderScreen({ route, navigation }) {
   const [product, setProduct] = useState(route.params.product);
-
+  const [address, setAddress] = useState('');
   //for user input
   const [isLoading, setIsLoading] = useState(false);
   const [inputQuantity, setInputQuantity] = useState(1);
@@ -60,6 +60,7 @@ export default function OrderScreen({ route, navigation }) {
       total_amount: totalAmount,
       // New for datetime
       delivery_date: formamtedDate,
+      address: address,
     };
     // using orderData to make payment request to server
     const response = await makePayment(orderData);
@@ -141,6 +142,9 @@ export default function OrderScreen({ route, navigation }) {
           inputHandler={inputHandler}
           onDateChange={(date) => {
             setDeliveryDate(date);
+          }}
+          onAddressChange={(text) => {
+            setAddress(text);
           }}
         />
       </ScrollView>

@@ -15,7 +15,9 @@ class OrderSerializer(serializers.ModelSerializer):
 # for list out order details
 # new for trascation screen
 class OrderListSerializer(serializers.ModelSerializer):
+    delivery_date = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S")
+    created = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S")
     class Meta:
         model = Order
-        fields = ('invoice_no', 'customer', 'product', 'quantity', 'total_amount', 'delivery_date', 'status', 'address')    
+        fields = ('invoice_no', 'customer', 'product', 'quantity', 'total_amount', 'delivery_date', 'status', 'address', 'created')    
         depth = 1
