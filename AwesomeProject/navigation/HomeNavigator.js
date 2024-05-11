@@ -12,7 +12,6 @@ import TransactionsScreen from '../screens/TransactionsScreen';
 import LoginScreen2 from "../screens/LoginScreen2";
 import ChatBotScreen from "../screens/ChatBotScreen";
 import UserListScreen from '../screens/UserlistScreen';
-import RegisterScreen from '../screens/RegisterScreen';
 import { FontAwesome } from '@expo/vector-icons';
 import OrderAdminScreen from '../screens/OrderAdminScreen';
 
@@ -62,7 +61,10 @@ function LoginNavigator() {
 export default function BottomTabNavigator() {
     const [token, setToken] = useState(null);
     const [role, setRole] = useState(null);
-
+    console.log(
+        'Token:', token,
+        'Role:', role
+    );
     useEffect(() => {
         const getToken = async () => {
             const storedToken = await AsyncStorage.getItem('token');
@@ -149,15 +151,7 @@ export default function BottomTabNavigator() {
                         headerShown: false
                     }}
                 />
-                <Tab.Screen
-                    name="Register"
-                    component={RegisterScreen}
-                    options={{
-                        tabBarLabel: 'Register',
-                        tabBarButton: EmptyComponent,  // Hides the tab bar button
-                        headerShown: false
-                    }}
-                />
+
             </Tab.Navigator>
             <FloatingButton />
         </View>
