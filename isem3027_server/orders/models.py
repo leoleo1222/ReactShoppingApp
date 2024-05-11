@@ -14,7 +14,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     payment_id = models.CharField(max_length=100, blank=True)
     payment_token = models.CharField(max_length=100, blank=True)
-    delivery_date = models.DateTimeField(blank=True, null=True)
+    delivery_date = models.DateTimeField(blank=True, null=True) # delivery date and time are stored here
     status = models.CharField(max_length=20, default='Pending')
     address = models.TextField(blank=True)
 

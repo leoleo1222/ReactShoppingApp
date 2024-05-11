@@ -120,6 +120,11 @@ class ProductView(APIView):
             product.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
+        def get_queryset(self):
+            return Product.objects.all()
+
+        def get_serializer(self, *args, **kwargs):
+            return ProductSerializer(*args, **kwargs)    
 
 class AccountView(APIView):
 

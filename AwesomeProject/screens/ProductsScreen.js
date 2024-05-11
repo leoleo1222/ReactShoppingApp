@@ -7,6 +7,7 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BASE_API_URL } from '../services/api';
+import ProductItem from '../components/ProductItem';
 
 export default function ProductsScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -113,10 +114,10 @@ export default function ProductsScreen({ navigation }) {
                 <Button title="Order Now" onPress={() => pressHandler(item)} />
               </View>
             </TouchableOpacity>
-          )}
           // renderItem={({ item }) => (
-          //   <ProductItem item={item} />
+            // <ProductItem item={item} />
           // )}
+          )}
           refreshing={isLoading}
           onRefresh={fetchProducts}
           contentContainerStyle={styles.productList}
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    fontFamily: 'Arial',
+    // fontFamily: 'Arial',
     fontSize: 16,
   },
   productList: {
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   emptyText: {
-    fontFamily: 'Arial',
+    // fontFamily: 'Arial',
     fontSize: 18,
     marginBottom: 20,
   },
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   productName: {
-    fontFamily: 'Arial',
+    // fontFamily: 'Arial',
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 5,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   productDescription: {
-    fontFamily: 'Arial',
+    // fontFamily: 'Arial',
     fontSize: 16,
     color: '#aaa',
     marginTop: 3,

@@ -20,8 +20,8 @@ export default function OrderScreen({ route, navigation }) {
 
   //for user input
   const [isLoading, setIsLoading] = useState(false);
-  const [inputQuantity, setInputQuantity] = useState("");
-  const [totalAmount, setTotalAmount] = useState("0");
+  const [inputQuantity, setInputQuantity] = useState(1);
+  const [totalAmount, setTotalAmount] = useState((product.price * product.discount).toFixed(2));
   const [showModal, setShowModal] = useState(false);
   const [approvalUrl, setApprovalUrl] = useState("");
   // New in datetime

@@ -2,6 +2,7 @@ import React, { useReducer, useMemo, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { SafeAreaView, Platform } from "react-native";
 
 import LoginScreen from "../screens/LoginScreen";
 import SplashScreen from "../screens/SplashScreen";
@@ -17,34 +18,36 @@ export default function MainStackNavigator() {
     username: null,
   };
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {/* {initialLoadingState.isLoading ? (
-          <Stack.Screen name="Splash" component={SplashScreen} />
-        ) : initialLoadingState.userToken == null ? (
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-        ) : (
-          <Stack.Screen
-            name="Home"
-            component={BottomTabNavigator}
-            options={{ headerShown: false }}
-          />
-        )} */}
-          <Stack.Screen
-            name="Home"
-            component={BottomTabNavigator}
-            options={{ headerShown: false }}
-          />
-          {/* <Stack.Screen
-            name="Login"
-            component={LoginScreen2}
-            options={{ headerShown: false }}
-          />         */}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={{ flex: 1, marginTop: Platform.OS === 'android' ? 25 : 0 }}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {/* {initialLoadingState.isLoading ? (
+            <Stack.Screen name="Splash" component={SplashScreen} />
+          ) : initialLoadingState.userToken == null ? (
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+          ) : (
+            <Stack.Screen
+              name="Home"
+              component={BottomTabNavigator}
+              options={{ headerShown: false }}
+            />
+          )} */}
+            <Stack.Screen
+              name="Home"
+              component={BottomTabNavigator}
+              options={{ headerShown: false }}
+            />
+            {/* <Stack.Screen
+              name="Login"
+              component={LoginScreen2}
+              options={{ headerShown: false }}
+            />         */}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
