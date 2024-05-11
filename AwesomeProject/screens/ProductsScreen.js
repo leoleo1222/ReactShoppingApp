@@ -6,6 +6,7 @@ import {
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
+import { BASE_API_URL } from '../services/api';
 
 export default function ProductsScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +53,8 @@ export default function ProductsScreen({ navigation }) {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/product/');
+      let endpoint = BASE_API_URL + '/product/';
+      const response = await fetch(endpoint);
       const data = await response.json();
       setProducts(data);
       setIsLoading(false);
@@ -183,8 +185,8 @@ const styles = StyleSheet.create({
     flex: 1,  // Ensures it stretches to fill available space horizontally
   },
   productImage: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     marginRight: 20,
   },
   productInfo: {

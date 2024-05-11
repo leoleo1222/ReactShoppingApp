@@ -59,7 +59,7 @@ export default function LoginScreen2({ navigation }) {
     try {
       const data = { username: Username, password }; // Modify the data object to match API requirements
       const response = await fetch(
-        "http://127.0.0.1:8000/api/api-token-auth/",
+        "http://192.168.1.225:8000/api/api-token-auth/",
         {
           method: "POST",
           headers: {

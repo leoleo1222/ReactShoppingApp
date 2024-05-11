@@ -108,7 +108,7 @@ export default function BottomTabNavigator() {
                         }
 
                         // Return the FontAwesome icon component with the determined iconName
-                        return <FontAwesome name={iconName} size={size} color={color} />;
+                        return <FontAwesome name={iconName} size={size} color='black' />;
                     },
 
                 })}

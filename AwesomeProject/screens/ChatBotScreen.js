@@ -12,7 +12,7 @@ import {
   Keyboard,
   ScrollView,
 } from "react-native";
-
+import BASE_API_URL from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatBotScreen = () => {
@@ -95,7 +95,8 @@ const ChatBotScreen = () => {
     // If the user typed the message directly, send it to the API
     if (!questions.questions.some((question) => question.text === option)) {
       console.log("Sending message to API:", option);
-      fetch("http://127.0.0.1:8000/api/chatbot/", {
+      let endpoint = BASE_API_URL + "chatbot/";
+      fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +147,7 @@ const ChatBotScreen = () => {
     const username = await AsyncStorage.getItem("username");
     const password = await AsyncStorage.getItem("password");
     // Fetch token from Django API
-    fetch("http://127.0.0.1:8000/api/api-token-auth/", {
+    fetch("http://192.168.1.225:8000/api/api-token-auth/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -166,7 +167,7 @@ const ChatBotScreen = () => {
 
   const fetchProducts = () => {
     // Fetch product data from Django API endpoint with token in headers
-    fetch("http://127.0.0.1:8000/api/product/", {
+    fetch("http://192.168.1.225:8000/api/product/", {
       // headers: {
       //   Authorization: `Token ${token}`,
       // },

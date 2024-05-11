@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BASE_API_URL } from "../services/api";
 
 
 export default function TransactionsScreen({ navigation }) {
@@ -17,7 +18,7 @@ export default function TransactionsScreen({ navigation }) {
   const [userToken, setUserToken] = useState(null); // State to store user token
 
   const getOrders = async (token) => {
-    const endpoint = "http://127.0.0.1:8000/api/orders/";
+    let endpoint = BASE_API_URL + "admin/orders/";
     const method = "GET";
     const headers = {
       "Content-Type": "application/json",

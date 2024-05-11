@@ -11,7 +11,7 @@ import {
   StatusBar,
   Modal,
 } from "react-native";
-import { apiLogin } from "../services/api";
+import { BASE_API_URL} from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -67,8 +67,9 @@ export default function LoginScreen2({ navigation }) {
   const handleLogin = useCallback(async () => {
     try {
       const data = { username: Username, password: password, role: role }; // Modify the data object to match API requirements
+      var endpoint = BASE_API_URL + "api-token-auth/";
       const response = await fetch(
-        "http://127.0.0.1:8000/api/api-token-auth/",
+        endpoint,
         {
           method: "POST",
           headers: {
@@ -104,7 +105,7 @@ export default function LoginScreen2({ navigation }) {
       // For example, navigate to the next screen
       navigation.navigate("Products");
       // refesh the page
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -118,8 +119,8 @@ export default function LoginScreen2({ navigation }) {
         password2: password2,
         email: email,
       };
-  
-      const response = await fetch("http://localhost:8000/api/admin/account/", {
+      const endpoint = BASE_API_URL + "api/admin/account/";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
