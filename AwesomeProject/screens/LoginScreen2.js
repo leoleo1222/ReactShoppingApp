@@ -129,6 +129,7 @@ export default function LoginScreen2({ navigation }) {
   
       if (!response.ok) {
         console.error("Registration failed");
+        setMaintenancePopup("A user with that username already exists.");
         return;
       }
   
