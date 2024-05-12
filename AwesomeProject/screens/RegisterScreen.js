@@ -14,6 +14,7 @@ import {
 import { apiLogin } from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from '@expo/vector-icons';
+import { BASE_API_URL} from "../services/api";
 
 // Placeholder functions for handling login and register navigation
 const handleSignUp = () => {};
@@ -59,7 +60,7 @@ export default function LoginScreen({ navigation }) {
     try {
       const data = { username: Username, password }; // Modify the data object to match API requirements
       const response = await fetch(
-        "http://192.168.1.225:8000/api/api-token-auth/",
+        BASE_API_URL + "/api-token-auth/",
         {
           method: "POST",
           headers: {
@@ -109,7 +110,7 @@ export default function LoginScreen({ navigation }) {
         email: email,
       };
   
-      const response = await fetch("http://localhost:8000/api/admin/account/", {
+      const response = await fetch(BASE_API_URL + "/user-register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
