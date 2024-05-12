@@ -103,6 +103,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             setToken(token);
             setRole(role);
 
+            // navigation.navigate("Products", { token: responseData.token, role: responseData.role});
 
         } catch (error) {
             // Handle potential errors in AsyncStorage or navigation

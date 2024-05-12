@@ -9,17 +9,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { BASE_API_URL } from '../services/api';
 import ProductItem from '../components/ProductItem';
 
-export default function ProductsScreen({ navigation, route }) {
+export default function ProductsScreen({ navigation, route}) {
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
 
-  const { token } = route.params || {};
-
   const serverURI = BASE_API_URL.split('/api/')[0];
 
-
+  const [token, setToken] = useState(null);
   useEffect(() => {
       const getToken = async () => {
           const storedToken = await AsyncStorage.getItem('token');

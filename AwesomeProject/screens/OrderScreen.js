@@ -21,7 +21,7 @@ export default function OrderScreen({ route, navigation }) {
   //for user input
   const [isLoading, setIsLoading] = useState(false);
   const [inputQuantity, setInputQuantity] = useState(1);
-  const [totalAmount, setTotalAmount] = useState((product.price * product.discount).toFixed(2));
+  const [totalAmount, setTotalAmount] = useState((parseFloat(product.price) - parseFloat(product.price) * parseFloat(product.discount)).toFixed(2));
   const [showModal, setShowModal] = useState(false);
   const [approvalUrl, setApprovalUrl] = useState("");
   // New in datetime
@@ -29,7 +29,7 @@ export default function OrderScreen({ route, navigation }) {
 
   const inputHandler = (value) => {
     setInputQuantity(value);
-    setTotalAmount((value * product.price * product.discount).toFixed(2));
+    setTotalAmount((value * (parseFloat(product.price) - parseFloat(product.price) * parseFloat(product.discount)).toFixed(2)).toFixed(2));
   };
 
   async function submitOrder() {

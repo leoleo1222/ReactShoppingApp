@@ -41,7 +41,7 @@ export default function OrderItem({ product, quantity, totalAmount, deliveryDate
                 <Text style={styles.descriptionText}>{product.description}</Text>
                 <Text style={styles.text}>Available Quantity: {product.quantity}</Text>
                 <Text style={styles.priceLine}>
-                    Price: <Text style={styles.originalPrice}>${product.price}</Text> ${(product.price * product.discount).toFixed(2)}
+                    Price: <Text style={styles.originalPrice}>${product.price}</Text> ${(parseFloat(product.price) - parseFloat(product.price) * parseFloat(product.discount)).toFixed(2)}
                 </Text>
             </View>
 
