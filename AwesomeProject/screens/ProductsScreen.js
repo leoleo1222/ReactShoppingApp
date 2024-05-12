@@ -17,6 +17,7 @@ export default function ProductsScreen({ navigation, route }) {
 
   const { token } = route.params || {};
 
+  const serverURI = BASE_API_URL.split('/api/')[0];
 
 
   useEffect(() => {
@@ -96,8 +97,8 @@ export default function ProductsScreen({ navigation, route }) {
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.productItemContainer} onPress={() => pressHandler(item)}>
               <Image
-                // source={{ uri: item.picture || 'https://via.placeholder.com/100' }}
-                source={{ uri: item.url || 'https://via.placeholder.com/100' }}
+                source={{ uri: serverURI+item.picture || 'https://via.placeholder.com/100' }}
+                // source={{ uri: item.url || 'https://via.placeholder.com/100' }}
                 style={styles.productImage}
                 // defaultSource={require('./path/to/local/placeholder.png')}
               />
@@ -186,8 +187,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     paddingBottom: 10,
-    marginLeft: 5,  // Reduced margin to increase width
-    marginRight: 5,  // Reduced margin to increase width
+    // marginLeft: 5,  // Reduced margin to increase width
+    // marginRight: 5,  // Reduced margin to increase width
     flex: 1,  // Ensures it stretches to fill available space horizontally
   },
   productImage: {
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   productInfo: {
-    flex: 1,
+    // flex: 1,
   },
   productName: {
     // fontFamily: 'Arial',

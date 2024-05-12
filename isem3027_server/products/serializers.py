@@ -44,3 +44,4 @@ class ProductSerializer(serializers.ModelSerializer):
             'updated',
             "category",
         )
+    picture = serializers.ImageField(max_length=None, use_url=True)
