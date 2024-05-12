@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     marginLeft: 20,
-    marginRight: 50,
+    marginRight: 20,
   },
   productInfo: {
     // flex: 1,

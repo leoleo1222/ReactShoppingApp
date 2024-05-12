@@ -8,11 +8,11 @@ isem3027_server/orders/__pycache__
 isem3027_server/products/__pycache__
 isem3027_server/orders/migrations/__pycache__
 isem3027_server/products/migrations/__pycache__
-isem3027_server/db.sqlite3
+# isem3027_server/db.sqlite3
 isem3027_server/products/migrations
 isem3027_server/orders/migrations
 isem3027_server/chatbot_proxy/__pycache__
 
 isem3027_server/venv
 .DS_Store
-*.sqlite3
+# *.sqlite3

@@ -3,11 +3,13 @@ import { Button, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pla
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAvoidingView} from 'react-native';
+import { BASE_API_URL } from '../services/api';
 
 export default function OrderItem({ product, quantity, totalAmount, deliveryDate, onDateChange, inputHandler, onAddressChange}) {
     const defaultImage = 'https://reactnative.dev/img/tiny_logo.png';
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const serverURI = BASE_API_URL.split('/api/')[0];
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || deliveryDate;
@@ -33,7 +35,7 @@ export default function OrderItem({ product, quantity, totalAmount, deliveryDate
             keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
         >
         <View style={styles.container}>
-            <Image style={styles.logo} source={{ uri: product.picture || defaultImage }} />
+            <Image style={styles.logo} source={{ uri: serverURI+product.picture || defaultImage }} />
             <Text style={styles.title}>{product.name}</Text>
             <View style={styles.infoBox}>
                 <Text style={styles.descriptionText}>{product.description}</Text>
