@@ -41,7 +41,7 @@ const facebookLogo = require("../assets/images/facebook-logo.png");
 const AppleLogo = require("../assets/images/apple-logo.png");
 const Logo = require("../assets/images/logo.png");
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation , onLogin}) {
   var register = false;
   const [Username, setUsername] = useState("");
   const [role, setRole] = useState("user");
@@ -106,8 +106,9 @@ export default function LoginScreen({ navigation }) {
 
       // Redirect or update state accordingly
       // For example, navigate to the next screen
-      navigation.navigate("Home", { token }); 
-      navigation.navigate("Products", { token: responseData.token });
+      onLogin(token, responseData.role);
+      // navigation.navigate("Home", { token }); 
+      // navigation.navigate("Products", { token: responseData.token, role: responseData.role});
 
 
       // refesh the page

@@ -10,17 +10,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_API_URL } from "../services/api";
 import TransactionsScreen from "./TransactionsScreen"; // Import the TransactionsScreen component
 
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen({ navigation , onLogout }) {
   // State variables to control dropdown visibility
   const [orderHistoryVisible, setOrderHistoryVisible] = useState(false);
   const [userData, setUserData] = useState(null); // State to hold user data
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("token");
-    await AsyncStorage.removeItem("role");
-    await AsyncStorage.removeItem("username");
-    console.log("Removed token from async storage");
+    // await AsyncStorage.removeItem("token");
+    // await AsyncStorage.removeItem("role");
+    // await AsyncStorage.removeItem("username");
+    
+    // console.log("Removed token from async storage");
+    onLogout();
     navigation.navigate("Products");
+    // navigation.navigate("Products", { setToken: null, setRole: null});
     // refesh the page
     history.go(0);
     (0);

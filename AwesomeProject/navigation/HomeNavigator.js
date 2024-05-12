@@ -81,6 +81,35 @@ export default function BottomTabNavigator({ navigation, route }) {
         getRole();
     }, []);
 
+
+    const handleLogout = async () => {
+        await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("role");
+        console.log("Logged out, removed token and role from async storage");
+        setToken(null);
+        setRole(null);
+    };
+
+    const handleLogin = async (token, role) => {
+        try {
+            // Store token and role in AsyncStorage
+            await AsyncStorage.setItem("token", token);
+            await AsyncStorage.setItem("role", role);
+    
+            // Log for debugging
+            console.log("Logged in, set token and role in async storage");
+    
+            // Update state
+            setToken(token);
+            setRole(role);
+
+
+        } catch (error) {
+            // Handle potential errors in AsyncStorage or navigation
+            console.error("Failed to log in and set token/role:", error);
+        }
+    };
+
     console.log(
         'Token in BottomTabNavigator:', token,
         'Role in BottomTabNavigator:', role
@@ -131,12 +160,12 @@ export default function BottomTabNavigator({ navigation, route }) {
                     <Tab.Screen name="OrderList" component={OrderAdminScreen} options={{ tabBarLabel: 'Order List' , headerShown: false }} />
                 ) : null}
                 {token ? (
-                    <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ tabBarLabel: 'Profile' , headerShown: false }} />
+                    <Tab.Screen name="ProfileTab"  children={() => <ProfileScreen onLogout={handleLogout} />} options={{ tabBarLabel: 'Profile' , headerShown: false }} />
                 ) : null}
                 
                 {/* Conditionally render the Login and Logout screens */}
                 {token === null ? (
-                    <Tab.Screen name="Login" component={LoginScreen} options={{ tabBarLabel: 'Login', headerShown: false }} />
+                    <Tab.Screen name="Login" children={() => <LoginScreen onLogin={handleLogin} />} options={{ tabBarLabel: 'Login', headerShown: false }} />
                 ) : (
                     // <Tab.Screen name="Logout" component={EmptyComponent} listeners={({ navigation }) => ({
                     //     tabPress: (e) => {
