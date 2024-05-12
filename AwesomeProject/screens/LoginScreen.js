@@ -2,6 +2,7 @@ import React, { Fragment, useState, useCallback } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   View,
   Text,
@@ -152,6 +153,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#FFFFFF" />
 
       <View style={styles.container}>
@@ -222,6 +224,13 @@ export default function LoginScreen({ navigation }) {
         <TouchableOpacity onPress={() => {
           setRole(role == 'user' ? 'admin' : 'user');
         }}>
+
+<View style={styles.registerTextContainer}>
+          <Text style={styles.registerText}>Don't have an account? </Text>
+          <TouchableOpacity onPress={toggleRegistrationModal}>
+            <Text style={styles.registerButtonText}>Sign up here</Text>
+          </TouchableOpacity>
+        </View>
           <Text style={styles.registerButtonText}>{role}</Text>
         </TouchableOpacity>
         {register ? (
@@ -273,12 +282,7 @@ export default function LoginScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.registerTextContainer}>
-          <Text style={styles.registerText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={toggleRegistrationModal}>
-            <Text style={styles.registerButtonText}>Sign up here</Text>
-          </TouchableOpacity>
-        </View>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -354,6 +358,7 @@ export default function LoginScreen({ navigation }) {
           </View>
         </Modal>
       </View>
+    </ScrollView>
     </SafeAreaView>
   );
 }
