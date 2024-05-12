@@ -4,10 +4,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaView, Platform } from "react-native";
 
-import LoginScreen from "../screens/LoginScreen";
 import SplashScreen from "../screens/SplashScreen";
 import BottomTabNavigator from "./HomeNavigator";
-import LoginScreen2 from "../screens/LoginScreen2";
+import LoginScreen from "../screens/LoginScreen";
 
 const Stack = createStackNavigator();
 
@@ -43,7 +42,7 @@ export default function MainStackNavigator() {
             />
             {/* <Stack.Screen
               name="Login"
-              component={LoginScreen2}
+              component={LoginScreen}
               options={{ headerShown: false }}
             />         */}
         </Stack.Navigator>

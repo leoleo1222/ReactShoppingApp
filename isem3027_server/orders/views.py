@@ -180,8 +180,9 @@ class OrderAdminUserView(APIView):
         """
         if username:
             orders = Order.objects.filter(customer__username=username)
-            if not orders.exists():
-                raise NotFound(detail="No orders found for the user.", code=status.HTTP_404_NOT_FOUND)
+            # if not orders.exists():
+            #     raise NotFound(detail="No orders found for the user.", code=status.HTTP_404_NOT_FOUND)
+            # the not found exception is not working
 
             serializer = OrderListSerializer(orders, many=True)
             return Response(serializer.data)

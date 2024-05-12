@@ -32,7 +32,7 @@ const facebookLogo = require("../assets/images/facebook-logo.png");
 const AppleLogo = require("../assets/images/apple-logo.png");
 const Logo = require("../assets/images/logo.png");
 
-export default function LoginScreen2({ navigation }) {
+export default function LoginScreen({ navigation }) {
   var register = true;
   const [Username, setUsername] = useState("");
   const [password, setPassword] = useState("");

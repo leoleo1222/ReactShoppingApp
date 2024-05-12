@@ -10,7 +10,7 @@ import {
   FlatList,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import BASE_API_URL from "../services/api";
+import { BASE_API_URL } from "../services/api";
 export default function OrderAdminScreen({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
     const [ordersList, setOrdersList] = useState([]);

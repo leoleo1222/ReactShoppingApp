@@ -9,7 +9,7 @@ import ProductsScreen from '../screens/ProductsScreen';
 import OrderScreen from '../screens/OrderScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
-import LoginScreen2 from "../screens/LoginScreen2";
+import LoginScreen from "../screens/LoginScreen";
 import ChatBotScreen from "../screens/ChatBotScreen";
 import UserListScreen from '../screens/UserlistScreen';
 import { FontAwesome } from '@expo/vector-icons';
@@ -43,13 +43,13 @@ function LoginNavigator() {
         <Stack.Navigator>
             <Stack.Screen
                 name="Login"
-                component={LoginScreen2}
+                component={LoginScreen}
                 initialParams={{ register: false }}  // Pass initialParams for navigators
                 options={{ tabBarLabel: 'Login', headerShown: false }}
             />
             <Stack.Screen
                 name="Register"
-                component={LoginScreen2}
+                component={LoginScreen}
                 initialParams={{ register: true }}  // Pass initialParams for navigators
                 options={{ tabBarLabel: 'Login', headerShown: false }}
             />
@@ -130,7 +130,7 @@ export default function BottomTabNavigator() {
                 
                 {/* Conditionally render the Login and Logout screens */}
                 {token === null ? (
-                    <Tab.Screen name="Login" component={LoginScreen2} options={{ tabBarLabel: 'Login', headerShown: false }} />
+                    <Tab.Screen name="Login" component={LoginScreen} options={{ tabBarLabel: 'Login', headerShown: false }} />
                 ) : (
                     // <Tab.Screen name="Logout" component={EmptyComponent} listeners={({ navigation }) => ({
                     //     tabPress: (e) => {

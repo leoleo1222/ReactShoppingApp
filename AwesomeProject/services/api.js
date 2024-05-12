@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export var BASE_API_URL = "http://192.168.1.225:8000/api/";
+// export var BASE_API_URL = "http://192.168.1.225:8000/api/";
+export var BASE_API_URL = "http://localhost:8000/api/"; // for local development and web simulator, cannot use localhost for real device
 
 const loginErrorMessage = "username/password incorrect"
 const applicationErrorMessage = "Application ran wrong"
