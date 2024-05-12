@@ -110,7 +110,7 @@ export default function LoginScreen({ navigation }) {
         email: email,
       };
   
-      const response = await fetch(BASE_API_URL + "/user-register/", {
+      const response = await fetch(BASE_API_URL + "user-register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

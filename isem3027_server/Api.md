@@ -19,16 +19,16 @@ This documentation covers the available API endpoints for products and admin acc
    - **GET**: Retrieves a list of all products.
 
 
-`localhost/user-register/<str:username>/`
-`localhost/user-register/`
+`localhostuser-register/<str:username>/`
+`localhostuser-register/`
 
 ### Admin Account Endpoints
 
-#### 5. `/user-register/<str:username>/`
+#### 5. `user-register/<str:username>/`
    - **GET**: Retrieves the details of a specific admin account using the username.
    - **DELETE**: Deletes a specific admin account using the username.
    - **PATCH**: Updates specific fields of an admin account using the username.
-   - **POST**: Typically not used as POST is for creating resources and should be directed to `/user-register/`.
+   - **POST**: Typically not used as POST is for creating resources and should be directed to `user-register/`.
 
-#### 6. `/user-register/`
+#### 6. `user-register/`
    - **GET**: Retrieves a list of all admin accounts.

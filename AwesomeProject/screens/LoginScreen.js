@@ -125,7 +125,7 @@ export default function LoginScreen({ navigation }) {
         password2: password2,
         email: email,
       };
-      const endpoint = BASE_API_URL + "/user-register/";
+      const endpoint = BASE_API_URL + "user-register/";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
