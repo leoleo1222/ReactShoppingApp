@@ -9,25 +9,27 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { BASE_API_URL } from '../services/api';
 import ProductItem from '../components/ProductItem';
 
-export default function ProductsScreen({ navigation }) {
+export default function ProductsScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
 
-  const [token, setToken] = useState(null);
+  const { token } = route.params || {};
 
-  useEffect(() => {
-      const getToken = async () => {
-          const storedToken = await AsyncStorage.getItem('token');
-          console.log('Stored token in ProductsScreen:', storedToken);
-          const Username = await AsyncStorage.getItem('username');
 
-          console.log('Stored username in ProductsScreen:', Username);
-          setToken(storedToken);
-      };
-      getToken();
-  }, []);
+
+  // useEffect(() => {
+  //     const getToken = async () => {
+  //         const storedToken = await AsyncStorage.getItem('token');
+  //         console.log('Stored token in ProductsScreen:', storedToken);
+  //         const Username = await AsyncStorage.getItem('username');
+
+  //         console.log('Stored username in ProductsScreen:', Username);
+  //         setToken(storedToken);
+  //     };
+  //     getToken();
+  // }, []);
 
   useEffect(() => {
     fetchProducts();

@@ -105,7 +105,9 @@ export default function LoginScreen({ navigation }) {
 
       // Redirect or update state accordingly
       // For example, navigate to the next screen
-      navigation.navigate("Products");
+      navigation.navigate("Products", { token: responseData.token });
+
+
       // refesh the page
       (0);
     } catch (error) {
