@@ -19,17 +19,17 @@ export default function ProductsScreen({ navigation, route }) {
 
 
 
-  // useEffect(() => {
-  //     const getToken = async () => {
-  //         const storedToken = await AsyncStorage.getItem('token');
-  //         console.log('Stored token in ProductsScreen:', storedToken);
-  //         const Username = await AsyncStorage.getItem('username');
+  useEffect(() => {
+      const getToken = async () => {
+          const storedToken = await AsyncStorage.getItem('token');
+          console.log('Stored token in ProductsScreen:', storedToken);
+          const Username = await AsyncStorage.getItem('username');
 
-  //         console.log('Stored username in ProductsScreen:', Username);
-  //         setToken(storedToken);
-  //     };
-  //     getToken();
-  // }, []);
+          console.log('Stored username in ProductsScreen:', Username);
+          setToken(storedToken);
+      };
+      getToken();
+  }, []);
 
   useEffect(() => {
     fetchProducts();

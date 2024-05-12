@@ -58,9 +58,14 @@ function LoginNavigator() {
 }
 
 
-export default function BottomTabNavigator() {
-    const [token, setToken] = useState(null);
+export default function BottomTabNavigator({ navigation, route }) {
+    const [token, setToken] = useState(route.params?.token || null);
     const [role, setRole] = useState(null);
+    useEffect(() => {
+        if (route.params?.token) {
+          setToken(route.params.token);
+        }
+      }, [route.params?.token]);
     useEffect(() => {
         const getToken = async () => {
             const storedToken = await AsyncStorage.getItem('token');

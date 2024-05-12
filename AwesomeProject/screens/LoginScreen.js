@@ -106,6 +106,7 @@ export default function LoginScreen({ navigation }) {
 
       // Redirect or update state accordingly
       // For example, navigate to the next screen
+      navigation.navigate("Home", { token }); 
       navigation.navigate("Products", { token: responseData.token });
 
 
@@ -153,7 +154,6 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#FFFFFF" />
 
       <View style={styles.container}>
@@ -358,7 +358,6 @@ export default function LoginScreen({ navigation }) {
           </View>
         </Modal>
       </View>
-    </ScrollView>
     </SafeAreaView>
   );
 }
