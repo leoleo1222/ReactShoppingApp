@@ -107,7 +107,7 @@ export default function LoginScreen({ navigation }) {
       // For example, navigate to the next screen
       navigation.navigate("Products");
       // refesh the page
-      history.go(0);
+      (0);
     } catch (error) {
       console.error("Error:", error);
     }

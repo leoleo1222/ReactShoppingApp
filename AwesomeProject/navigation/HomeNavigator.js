@@ -61,10 +61,6 @@ function LoginNavigator() {
 export default function BottomTabNavigator() {
     const [token, setToken] = useState(null);
     const [role, setRole] = useState(null);
-    console.log(
-        'Token:', token,
-        'Role:', role
-    );
     useEffect(() => {
         const getToken = async () => {
             const storedToken = await AsyncStorage.getItem('token');
@@ -79,6 +75,11 @@ export default function BottomTabNavigator() {
         };
         getRole();
     }, []);
+
+    console.log(
+        'Token in BottomTabNavigator:', token,
+        'Role in BottomTabNavigator:', role
+    );
 
     return (
         <View style={{ flex: 1 }}>

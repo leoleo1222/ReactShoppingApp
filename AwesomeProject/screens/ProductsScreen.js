@@ -20,7 +20,10 @@ export default function ProductsScreen({ navigation }) {
   useEffect(() => {
       const getToken = async () => {
           const storedToken = await AsyncStorage.getItem('token');
-          console.log('Stored token:', storedToken);
+          console.log('Stored token in ProductsScreen:', storedToken);
+          const Username = await AsyncStorage.getItem('username');
+
+          console.log('Stored username in ProductsScreen:', Username);
           setToken(storedToken);
       };
       getToken();

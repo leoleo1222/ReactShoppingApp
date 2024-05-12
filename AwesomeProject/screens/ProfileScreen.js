@@ -21,7 +21,7 @@ export default function ProfileScreen({ navigation }) {
     await AsyncStorage.removeItem("username");
     console.log("Removed token from async storage");
     navigation.navigate("Products");
-    history.go(0);
+    (0);
   };
   
 
@@ -32,6 +32,7 @@ export default function ProfileScreen({ navigation }) {
   // Function to fetch user data from the API
   const fetchUserData = async () => {
     const Username = await AsyncStorage.getItem('username');
+    console.log('Stored username in ProfileScreen:', Username);
     let endpoint = BASE_API_URL + 'admin/account/' + Username + '/';
     try {
       const response = await fetch(
