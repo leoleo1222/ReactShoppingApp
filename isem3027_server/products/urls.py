@@ -33,7 +33,7 @@ urlpatterns = [
 ]
 
 # example:
-# post data to server for user register > localhost:8000/user-register/
+# post data to server for user register > localhost:8000user-register/
 # get user ID 999 detail info > localhost:8000/user/999/
 # post data to server for getting user token > localhost:8000/api-token-auth/
 # get products list data > localhost:8000/products/

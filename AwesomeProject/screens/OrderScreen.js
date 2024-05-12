@@ -131,24 +131,25 @@ export default function OrderScreen({ route, navigation }) {
 
       {/* ScrollView is the main content view for displaying product detail */}
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={styles.scrollView}
         refreshControl={refreshControl}
       >
-        <OrderItem
-          product={product}
-          quantity={inputQuantity}
-          totalAmount={totalAmount}
-          deliveryDate={deliveryDate}
-          inputHandler={inputHandler}
-          onDateChange={(date) => {
-            setDeliveryDate(date);
-          }}
-          onAddressChange={(text) => {
-            setAddress(text);
-          }}
-        />
+        <View style={styles.orderItemContainer}>
+          <OrderItem
+            product={product}
+            quantity={inputQuantity}
+            totalAmount={totalAmount}
+            deliveryDate={deliveryDate}
+            inputHandler={inputHandler}
+            onDateChange={(date) => {
+              setDeliveryDate(date);
+            }}
+            onAddressChange={(text) => {
+              setAddress(text);
+            }}
+          />
+        </View>
       </ScrollView>
-
       <TouchableOpacity
         style={styles.orderButton}
         onPress={() => {
@@ -161,15 +162,19 @@ export default function OrderScreen({ route, navigation }) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    padding: 20,
+    padding: 30,
     justifyContent: "space-between",
   },
   scrollView: {
     flexGrow: 1,
+  },
+  orderItemContainer: {
+    marginBottom: 20, // Add margin bottom to create spacing between OrderItem and Order button
   },
   orderButton: {
     flexDirection: "row",
@@ -178,27 +183,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#4267B2",
     borderRadius: 8,
     padding: 15,
-    marginTop: 20,
   },
   buttonText: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#FFFFFF",
     marginLeft: 10,
-  },
-  textInput: {
-    width: "100%",
-    marginVertical: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "#DADDE1",
-    height: 40,
-  },
-  amountText: {
-    fontSize: 20,
-    alignSelf: "flex-end",
-    fontWeight: "bold",
-    marginTop: 10,
-  },
+  }
 });
