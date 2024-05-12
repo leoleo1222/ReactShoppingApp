@@ -1,72 +1,69 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Button,
-  ScrollView,
-  TouchableOpacity,
   ActivityIndicator,
   FlatList,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_API_URL } from "../services/api";
+
 export default function OrderAdminScreen({ navigation }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [ordersList, setOrdersList] = useState([]);
-    const [userToken, setUserToken] = useState(null); // State to store user token
-  
-    const getOrders = async (token) => {
-      let endpoint = BASE_API_URL + "admin/orders/";
-      const method = "GET";
-      const headers = {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Token ${token}`,
-      };
-  
-      try {
-        const response = await fetch(endpoint, {
-          method: method,
-          headers: headers,
-        });
-  
-        if (!response.ok) {
-          throw new Error("Cannot fetch any orders");
-        }
-  
-        const jsonResponse = await response.json();
-        setOrdersList(jsonResponse);
-        console.log("Orders fetched successfully:", jsonResponse.status);
-        jsonResponse.forEach((transaction) => {
-          console.log("Transaction status:", transaction.status);
-        });
-        return jsonResponse;
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-        return { error: "Cannot fetch any orders" };
-      }
+  const [isLoading, setIsLoading] = useState(false);
+  const [ordersList, setOrdersList] = useState([]);
+  const [userToken, setUserToken] = useState(null);
+
+  const getOrders = async (token) => {
+    console.log("Fetching orders...");
+    let endpoint = BASE_API_URL + "admin/orders/";
+    const method = "GET";
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Token ${token}`,
     };
-    const fetchOrders = async () => {
-        const token = await AsyncStorage.getItem('token');
-        setIsLoading(true);
-        await getOrders(token);
-        setIsLoading(false);
-      };
-    
-      useEffect(() => {
-        fetchOrders();
-      }, []);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: headers,
+      });
+
+      if (!response.ok) {
+        throw new Error("Cannot fetch any orders");
+      }
+
+      const jsonResponse = await response.json();
+      setOrdersList(jsonResponse);
+      console.log("Orders fetched successfully:", jsonResponse.status);
+      jsonResponse.forEach((transaction) => {
+        console.log("Transaction status:", transaction.status);
+      });
+      return jsonResponse;
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      return { error: "Cannot fetch any orders" };
+    }
+  };
+
+  const fetchOrders = async () => {
+    console.log("Fetching orders...");
+    const token = await AsyncStorage.getItem('token');
+    setIsLoading(true);
+    await getOrders(token);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-
-      {/* Order History */}
-
+    <View style={styles.container}>
       <Text style={styles.sectionTitle}>Order History</Text>
 
-      <View style={styles.dropdownContent}>
-      <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator size="large" color="#007bff" />
       ) : ordersList.length > 0 ? (
@@ -103,17 +100,15 @@ export default function OrderAdminScreen({ navigation }) {
         </View>
       )}
     </View>
-      </View>
-    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-    sectionTitle: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginBottom: 10,
-      },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#f8f9fa",
@@ -124,12 +119,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  topText: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
   },
   itemContainer: {
     backgroundColor: "#fff",
