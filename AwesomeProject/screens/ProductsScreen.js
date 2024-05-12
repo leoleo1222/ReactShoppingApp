@@ -168,7 +168,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   productList: {
-    alignItems: 'center',
+    // alignItems: 'center',
+    flexGrow: 1,
+    width: '100%',
   },
   emptyView: {
     flex: 1,
@@ -192,9 +194,10 @@ const styles = StyleSheet.create({
     flex: 1,  // Ensures it stretches to fill available space horizontally
   },
   productImage: {
-    width: 100,
-    height: 100,
-    marginRight: 20,
+    width: 150,
+    height: 150,
+    marginLeft: 20,
+    marginRight: 50,
   },
   productInfo: {
     // flex: 1,
